@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}เกี่ยวกับเรา{% endblock %}
+
+{% block extra_head %}
+<style>
+    .about-header {
+        text-align: center;
+        padding: 4rem 2rem;
+        background-color: #f7f7f7;
+        border-radius: 8px;
+        margin-bottom: 3rem;
+    }
+
+    .about-header h1 {
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .about-header p {
+        font-size: 1.25rem;
+        color: #555;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .mission-section {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+    }
+
+    .mission-section img {
+        max-width: 40%;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="about-header">
+    <h1>เกี่ยวกับ Sisaket Journey</h1>
+    <p>คู่มือเดินทางฉบับสมบูรณ์ที่จะพาคุณไปสัมผัสทุกแง่มุมของจังหวัดศรีสะเกษ</p>
+</section>
+
+<section class="mission-section">
+    <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=2070&auto=format&fit=crop" alt="ทีมงาน">
+    <div>
+        <h2>ภารกิจของเรา</h2>
+        <p>
+            เราเชื่อว่าศรีสะเกษเป็นจังหวัดที่มีศักยภาพด้านการท่องเที่ยวสูงมาก ไม่ว่าจะเป็นธรรมชาติที่งดงาม วัฒนธรรมที่เป็นเอกลักษณ์ และผู้คนที่เป็นมิตร เว็บไซต์ "Sisaket Journey" จึงถูกสร้างขึ้นด้วยความตั้งใจที่จะรวบรวมข้อมูลสถานที่ท่องเที่ยว ที่พัก ร้านอาหาร และกิจกรรมต่างๆ ในจังหวัดศรีสะเกษไว้อย่างครบถ้วน เพื่อเป็นแนวทางให้กับนักท่องเที่ยวทุกท่านได้วางแผนการเดินทางและสร้างความทรงจำอันน่าประทับใจ
+        </p>
+        <p>
+            เราหวังว่าเว็บไซต์นี้จะเป็นส่วนหนึ่งที่ช่วยกระตุ้นเศรษฐกิจท้องถิ่นและทำให้ศรีสะเกษเป็นที่รู้จักในวงกว้างมากยิ่งขึ้น ขอให้ทุกท่านมีความสุขกับการเดินทางในศรีสะเกษครับ!
+        </p>
+    </div>
+</section>
+{% endblock %}

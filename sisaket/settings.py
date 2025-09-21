@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-qrkgoccx02wd8gd-i0d#p4ez00z#yu(vm+xsm#a@69cp!$@j3q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','.vercel.app']
 
 
 # Application definition
@@ -54,7 +54,7 @@ ROOT_URLCONF = "sisaket.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
