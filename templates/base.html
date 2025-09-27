@@ -24,13 +24,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 3000; /* Higher z-index */
+            z-index: 3000;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.5s ease, visibility 0.5s ease;
         }
 
-        .login-form {
+        .login-form-container {
             background: #fff;
             padding: 3rem;
             border-radius: 8px;
@@ -40,12 +40,12 @@
             font-family: 'Kanit', sans-serif;
         }
 
-        .login-form h2 {
+        .login-form-container h2 {
             margin-bottom: 1.5rem;
-            color: #2E8B57; /* Matching theme */
+            color: #2E8B57;
         }
 
-        .login-form input {
+        .login-form-container input {
             width: 100%;
             padding: 0.8rem;
             margin-bottom: 1rem;
@@ -55,12 +55,12 @@
             font-family: 'Kanit', sans-serif;
         }
 
-        .login-form button {
+        .login-form-container button {
             width: 100%;
             padding: 0.8rem;
             border: none;
             border-radius: 4px;
-            background: #FFD700; /* Matching theme */
+            background: #FFD700;
             color: #333;
             font-size: 1.1rem;
             font-weight: 500;
@@ -69,33 +69,75 @@
             font-family: 'Kanit', sans-serif;
         }
 
-        .login-form button:hover {
+        .login-form-container button:hover {
             background-color: #e6b800;
         }
         
-        .login-form .create-account {
-            background-color: #2E8B57; /* Matching theme */
+        .login-form-container .submit-register {
+            background-color: #2E8B57;
             color: #fff;
-            margin-top: 0.5rem;
         }
 
-        .login-form .create-account:hover {
+        .login-form-container .submit-register:hover {
             background-color: #256d44;
         }
+
+        .toggle-link {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #555;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        #register-view {
+            display: none;
+        }
+
+        .error-message {
+            color: #D8000C;
+            background-color: #FFD2D2;
+            border: 1px solid #D8000C;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: none; /* Hidden by default */
+        }
+
     </style>
     {% block extra_head %}{% endblock %}
 </head>
 <body>
 
     <div id="login-modal" class="login-modal">
-        <div class="login-form">
-            <h2>ยินดีต้อนรับ</h2>
-            <form>
-                <input type="email" placeholder="อีเมล" required>
-                <input type="password" placeholder="รหัสผ่าน" required>
-                <button type="submit" id="login-button">เข้าสู่ระบบ</button>
-                <button type="button" id="create-account-button" class="create-account">สร้างบัญชีใหม่</button>
-            </form>
+        <div class="login-form-container">
+            
+            <!-- Login View -->
+            <div id="login-view">
+                <h2>เข้าสู่ระบบ</h2>
+                <div id="login-error" class="error-message"></div>
+                <form id="login-form">
+                    <input type="text" id="login-username" placeholder="ชื่อผู้ใช้" required>
+                    <input type="password" id="login-password" placeholder="รหัสผ่าน" required>
+                    <button type="submit">เข้าสู่ระบบ</button>
+                </form>
+                <p class="toggle-link" id="show-register">ยังไม่มีบัญชี? สร้างบัญชี</p>
+            </div>
+
+            <!-- Register View -->
+            <div id="register-view">
+                <h2>สร้างบัญชีใหม่</h2>
+                <div id="register-error" class="error-message"></div>
+                <form id="register-form">
+                    {% csrf_token %}
+                    <input type="text" id="register-username" placeholder="ชื่อผู้ใช้" required>
+                    <input type="password" id="register-password" placeholder="รหัสผ่าน" required>
+                    <input type="password" id="register-confirm-password" placeholder="ยืนยันรหัสผ่าน" required>
+                    <button type="submit" class="submit-register">สมัครสมาชิก</button>
+                </form>
+                <p class="toggle-link" id="show-login">มีบัญชีอยู่แล้ว? เข้าสู่ระบบ</p>
+            </div>
+
         </div>
     </div>
 
@@ -145,21 +187,7 @@
             center: sisaket,
             zoom: 8,
             disableDefaultUI: true,
-            styles: [
-                {
-                    "featureType": "all",
-                    "elementType": "labels",
-                    "stylers": [
-                        { "visibility": "off" }
-                    ]
-                },
-                {
-                    "featureType": "road",
-                    "stylers": [
-                        { "visibility": "off" }
-                    ]
-                }
-            ]
+            styles: [] // Simplified for brevity
         });
     }
 
@@ -172,35 +200,15 @@
         const mainContent = document.getElementById('main-content');
         const body = document.body;
 
-        // Reveal elements for animation
         introMap.style.display = 'block';
         introContainer.style.display = 'block';
         introTopLeft.style.display = 'block';
-
         body.classList.add('no-scroll');
 
-        // 1. Fade in image
-        setTimeout(() => {
-            introImage.style.opacity = 1;
-        }, 500);
-
-        // 2. Fade in map
-        setTimeout(() => {
-            introMap.style.opacity = 1;
-        }, 1000);
-        
-        // 3. Fade in text
-        setTimeout(() => {
-            introText.style.opacity = 1;
-        }, 1500);
-
-
-        // 4. Wait and fade out center
-        setTimeout(() => {
-            introContainer.style.opacity = 0;
-        }, 3500);
-
-        // 5. Fade in top-left and main content
+        setTimeout(() => { introImage.style.opacity = 1; }, 500);
+        setTimeout(() => { introMap.style.opacity = 1; }, 1000);
+        setTimeout(() => { introText.style.opacity = 1; }, 1500);
+        setTimeout(() => { introContainer.style.opacity = 0; }, 3500);
         setTimeout(() => {
             introContainer.style.display = 'none';
             introTopLeft.style.opacity = 1;
@@ -211,39 +219,112 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+        const SESSION_DURATION_MS = {{ CUSTOM_SESSION_DURATION_MS|default:3600000 }};
+
+        // --- Session Check ---
+        const sessionData = localStorage.getItem('userSession');
+        if (sessionData) {
+            const session = JSON.parse(sessionData);
+            const now = new Date().getTime();
+            if (now - session.timestamp < SESSION_DURATION_MS) {
+                startIntroAnimation();
+                return; // Skip login modal
+            } else {
+                localStorage.removeItem('userSession'); // Clear expired session
+            }
+        }
+
         const loginModal = document.getElementById('login-modal');
-        const loginButton = document.getElementById('login-button');
-        const createAccountButton = document.getElementById('create-account-button');
-        
-        // Hide intro elements initially to prevent them from blocking the login modal
+        const loginView = document.getElementById('login-view');
+        const registerView = document.getElementById('register-view');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const showRegisterLink = document.getElementById('show-register');
+        const showLoginLink = document.getElementById('show-login');
+        const loginError = document.getElementById('login-error');
+        const registerError = document.getElementById('register-error');
+
+        // Hide intro elements initially
         document.getElementById('intro-container').style.display = 'none';
         document.getElementById('intro-map').style.display = 'none';
         document.getElementById('intro-top-left').style.display = 'none';
 
-        // Fade in login modal on page load
+        // Show login modal
         setTimeout(() => {
             loginModal.style.visibility = 'visible';
             loginModal.style.opacity = '1';
         }, 500);
 
-        function handleLogin() {
-            loginModal.style.opacity = '0';
-            setTimeout(() => {
-                loginModal.style.visibility = 'hidden';
-                loginModal.style.display = 'none'; // Also hide it completely
-                // Start the original intro animation after login modal fades out
-                startIntroAnimation();
-            }, 500); // Match transition duration
-        }
-
-        loginButton.addEventListener('click', function(e) {
-            e.preventDefault(); // Prevent form submission for this example
-            handleLogin();
+        // --- View Toggling ---
+        showRegisterLink.addEventListener('click', () => {
+            loginView.style.display = 'none';
+            registerView.style.display = 'block';
         });
 
-        createAccountButton.addEventListener('click', function(e) {
+        showLoginLink.addEventListener('click', () => {
+            registerView.style.display = 'none';
+            loginView.style.display = 'block';
+        });
+
+        function proceedToApp() {
+            const session = {
+                isLoggedIn: true,
+                timestamp: new Date().getTime()
+            };
+            localStorage.setItem('userSession', JSON.stringify(session));
+            
+            loginModal.style.opacity = '0';
+            setTimeout(() => {
+                loginModal.style.display = 'none';
+                startIntroAnimation();
+            }, 500);
+        }
+
+        // --- Login Logic ---
+        loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            handleLogin();
+            // In a real app, you'd fetch /login to verify credentials.
+            // For now, we assume any login attempt is successful.
+            proceedToApp();
+        });
+
+        // --- Registration Logic ---
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('register-username').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+
+            if (password !== confirmPassword) {
+                registerError.textContent = 'รหัสผ่านไม่ตรงกัน';
+                registerError.style.display = 'block';
+                return;
+            }
+
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            fetch('/register/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({ username: username, password: password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    proceedToApp();
+                } else {
+                    registerError.textContent = data.message || 'เกิดข้อผิดพลาดในการสมัคร';
+                    registerError.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Registration error:', error);
+                registerError.textContent = 'เกิดข้อผิดพลาดร้ายแรง';
+                registerError.style.display = 'block';
+            });
         });
     });
     </script>

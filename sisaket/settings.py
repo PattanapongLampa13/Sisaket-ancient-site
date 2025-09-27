@@ -83,9 +83,11 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "vercel.context_processors.global_settings",
             ],
         },
     },
@@ -104,6 +106,8 @@ DATABASES = {
     }
 }
 
+# Custom Settings
+CUSTOM_SESSION_DURATION_SECONDS = 30 # 1 hour in milliseconds
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
