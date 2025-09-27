@@ -61,7 +61,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "sisaket",
+    "sisaket", # แอปเก่า
+    "vercel",  # แอปใหม่ที่มี views
 ]
 
 MIDDLEWARE = [

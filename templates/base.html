@@ -39,10 +39,13 @@
                  <!-- This will be hidden initially -->
             </div>
             <nav class="nav-links">
-                <a href="/">หน้าแรก</a>
-                <a href="/places">สถานที่</a>
+                <a href="{% url 'home' %}">หน้าแรก</a>
+                <a href="{% url 'places' %}">สถานที่</a>
                 <a href="/map">แผนที่</a>
                 <a href="/about">เกี่ยวกับ</a>
+                {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" style="color: #ffc107;">ออกจากระบบ</a>
+                {% endif %}
             </nav>
         </header>
 

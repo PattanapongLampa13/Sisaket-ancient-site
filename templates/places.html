@@ -70,6 +70,15 @@
     <h1>สถานที่ท่องเที่ยวในศรีสะเกษ</h1>
     <p>ค้นพบความงดงามและเรื่องราวอันน่าทึ่งของสถานที่ต่างๆ ทั่วทั้งจังหวัด</p>
 </section>
+{% if user.is_authenticated %}
+<div style="text-align: center; margin-bottom: 2rem;">
+    <p style="font-size: 1.1rem; color: #555;">
+        สวัสดี, <strong>{{ user.username }}</strong>! | 
+        <a href="{% url 'delete_account' %}" style="color: #dc3545; text-decoration: none;">ลบบัญชี</a>
+    </p>
+</div>
+{% endif %}
+
 
 <section class="places-list">
     <div class="places-grid">
