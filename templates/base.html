@@ -13,9 +13,91 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000; /* Higher z-index */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .login-form {
+            background: #fff;
+            padding: 3rem;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .login-form h2 {
+            margin-bottom: 1.5rem;
+            color: #2E8B57; /* Matching theme */
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .login-form button {
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 4px;
+            background: #FFD700; /* Matching theme */
+            color: #333;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .login-form button:hover {
+            background-color: #e6b800;
+        }
+        
+        .login-form .create-account {
+            background-color: #2E8B57; /* Matching theme */
+            color: #fff;
+            margin-top: 0.5rem;
+        }
+
+        .login-form .create-account:hover {
+            background-color: #256d44;
+        }
+    </style>
     {% block extra_head %}{% endblock %}
 </head>
 <body>
+
+    <div id="login-modal" class="login-modal">
+        <div class="login-form">
+            <h2>ยินดีต้อนรับ</h2>
+            <form>
+                <input type="email" placeholder="อีเมล" required>
+                <input type="password" placeholder="รหัสผ่าน" required>
+                <button type="submit" id="login-button">เข้าสู่ระบบ</button>
+                <button type="button" id="create-account-button" class="create-account">สร้างบัญชีใหม่</button>
+            </form>
+        </div>
+    </div>
 
     <div id="intro-map"></div>
 
@@ -81,15 +163,19 @@
         });
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
+    function startIntroAnimation() {
         const introContainer = document.getElementById('intro-container');
-        const introCenter = document.getElementById('intro-center');
         const introTopLeft = document.getElementById('intro-top-left');
+        const introMap = document.getElementById('intro-map');
         const introText = document.getElementById('intro-text');
         const introImage = document.getElementById('intro-image');
-        const introMap = document.getElementById('intro-map');
         const mainContent = document.getElementById('main-content');
         const body = document.body;
+
+        // Reveal elements for animation
+        introMap.style.display = 'block';
+        introContainer.style.display = 'block';
+        introTopLeft.style.display = 'block';
 
         body.classList.add('no-scroll');
 
@@ -122,6 +208,43 @@
             mainContent.classList.add('fade-in');
             body.classList.remove('no-scroll');
         }, 4500);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginModal = document.getElementById('login-modal');
+        const loginButton = document.getElementById('login-button');
+        const createAccountButton = document.getElementById('create-account-button');
+        
+        // Hide intro elements initially to prevent them from blocking the login modal
+        document.getElementById('intro-container').style.display = 'none';
+        document.getElementById('intro-map').style.display = 'none';
+        document.getElementById('intro-top-left').style.display = 'none';
+
+        // Fade in login modal on page load
+        setTimeout(() => {
+            loginModal.style.visibility = 'visible';
+            loginModal.style.opacity = '1';
+        }, 500);
+
+        function handleLogin() {
+            loginModal.style.opacity = '0';
+            setTimeout(() => {
+                loginModal.style.visibility = 'hidden';
+                loginModal.style.display = 'none'; // Also hide it completely
+                // Start the original intro animation after login modal fades out
+                startIntroAnimation();
+            }, 500); // Match transition duration
+        }
+
+        loginButton.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent form submission for this example
+            handleLogin();
+        });
+
+        createAccountButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            handleLogin();
+        });
     });
     </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initIntroMap"></script>
