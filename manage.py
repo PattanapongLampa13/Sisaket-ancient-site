@@ -1,3 +1,12 @@
+<div id="register-form-section" style="display:none;">
+    <h1>สร้างบัญชีใหม่</h1>
+    <form method="post" action="{% url 'auth' %}" id="register-form">
+        {% csrf_token %}
+        {{ register_form.as_p }}
+        <button type="submit" class="btn-submit">สมัครสมาชิก</button>
+    </form>
+    <p class="form-link">มีบัญชีอยู่แล้ว? <a href="#" onclick="showTab('login');return false;">เข้าสู่ระบบ</a></p>
+</div>
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
 import os

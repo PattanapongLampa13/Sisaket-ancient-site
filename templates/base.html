@@ -14,36 +14,99 @@
 
     <link rel="stylesheet" href="{% static 'style.css' %}">
     {% block extra_head %}{% endblock %}
+    <style>
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-auth {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .nav-auth a {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .nav-auth a.btn-login {
+            border: 1px solid var(--primary-color);
+        }
+        .nav-auth a.btn-register {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        #intro-auth {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            margin-top: 2rem;
+        }
+    </style>
 </head>
 <body>
 
+    {% with request.path as current_path %}
+    {% if current_path|slice:':5' != '/auth' and current_path|slice:':6' != '/login/' and current_path|slice:':10' != '/register/' %}
     <div id="intro-map"></div>
-
+    {% endif %}
+    {% endwith %}
     <!-- Intro Animation -->
-    <div id="intro-container">
+    <div id="intro-container" {% if not user.is_authenticated %}style="display: none;"{% endif %}>
         <div id="intro-center">
             <img id="intro-image" src="{% static 'images/prasat.jpg' %}" alt="Prasat">
             <h1 id="intro-text">โบราณสถานจังหวัดศรีสะเกษ</h1>
+            <div id="intro-auth" class="nav-auth">
+            </div>
         </div>
     </div>
-    <div id="intro-top-left">
+    {% with request.path as current_path %}
+    {% if not user.is_authenticated and current_path|slice:':5' != '/auth' %}
+    <style>
+      body { background: #fff !important; }
+      #intro-map, #intro-container, #intro-top-left, #main-content { display: none !important; }
+    </style>
+    <div id="login-container" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; background: #fff; z-index: 10000;">
+        <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: var(--shadow); text-align: center;">
+            <h2 style="margin-bottom: 1rem;">กรุณาเข้าสู่ระบบเพื่อเข้าชมเว็บไซต์</h2>
+            <a href="{% url 'auth' %}" class="btn-submit" style="display: inline-block; text-decoration: none;">เข้าสู่ระบบ / สมัครสมาชิก</a>
+        </div>
+    </div>
+    {% endif %}
+    {% endwith %}
+    <div id="intro-top-left" {% if not user.is_authenticated %}style="display: none;"{% endif %}>
         <img id="intro-image-corner" src="{% static 'images/prasat.jpg' %}" alt="Prasat">
         <span id="intro-text-corner">โบราณสถานจังหวัดศรีสะเกษ</span>
     </div>
 
 
     <!-- Main Content (will be shown after loader) -->
-    <div id="main-content" class="hidden">
+    {% with request.path as current_path %}
+    <div id="main-content" 
+        {% if not user.is_authenticated and current_path|slice:':5' != '/auth' and current_path|slice:':6' != '/login/' and current_path|slice:':10' != '/register/' %}style="display: none;"{% endif %}
+        {% if current_path|slice:':5' == '/auth' or current_path|slice:':6' == '/login/' or current_path|slice:':10' == '/register/' %}style="background: #fff; min-height: 100vh; display: flex; align-items: center; justify-content: center;"{% endif %}
+    >
+    {% endwith %}
         <header class="header">
             <div class="logo" id="logo-placeholder">
                  <!-- This will be hidden initially -->
             </div>
             <nav class="nav-links">
-                <a href="/">หน้าแรก</a>
-                <a href="/places">สถานที่</a>
-                <a href="/map">แผนที่</a>
-                <a href="/about">เกี่ยวกับ</a>
+
+                <a href="{% url 'home' %}">หน้าแรก</a>
+                <a href="{% url 'places' %}">สถานที่</a>
+                <a href="{% url 'map' %}">แผนที่</a>
+                <a href="{% url 'about' %}">เกี่ยวกับ</a>
             </nav>
+            {% if user.is_authenticated %}
+                <nav class="nav-auth">
+                    <span>สวัสดี, {{ user.username }}</span>
+                    <a href="{% url 'logout' %}" class="btn-login">ออกจากระบบ</a>
+                </nav>
+            {% endif %}
         </header>
 
         <main class="container">
@@ -56,6 +119,8 @@
         </footer>
     </div>
 
+    {% with request.path as current_path %}
+    {% if current_path|slice:':5' != '/auth' and current_path|slice:':6' != '/login/' and current_path|slice:':10' != '/register/' %}
     <script>
     function initIntroMap() {
         const sisaket = { lat: 15.118, lng: 104.323 };
@@ -80,51 +145,11 @@
             ]
         });
     }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const introContainer = document.getElementById('intro-container');
-        const introCenter = document.getElementById('intro-center');
-        const introTopLeft = document.getElementById('intro-top-left');
-        const introText = document.getElementById('intro-text');
-        const introImage = document.getElementById('intro-image');
-        const introMap = document.getElementById('intro-map');
-        const mainContent = document.getElementById('main-content');
-        const body = document.body;
-
-        body.classList.add('no-scroll');
-
-        // 1. Fade in image
-        setTimeout(() => {
-            introImage.style.opacity = 1;
-        }, 500);
-
-        // 2. Fade in map
-        setTimeout(() => {
-            introMap.style.opacity = 1;
-        }, 1000);
-        
-        // 3. Fade in text
-        setTimeout(() => {
-            introText.style.opacity = 1;
-        }, 1500);
-
-
-        // 4. Wait and fade out center
-        setTimeout(() => {
-            introContainer.style.opacity = 0;
-        }, 3500);
-
-        // 5. Fade in top-left and main content
-        setTimeout(() => {
-            introContainer.style.display = 'none';
-            introTopLeft.style.opacity = 1;
-            mainContent.classList.remove('hidden');
-            mainContent.classList.add('fade-in');
-            body.classList.remove('no-scroll');
-        }, 4500);
-    });
     </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initIntroMap"></script>
+    {% endif %}
+    {% endwith %}
+    </script>
 
 </body>
 </html>

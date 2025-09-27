@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}เข้าสู่ระบบ{% endblock %}
+{% block content %}
+<div style="display:flex;justify-content:center;align-items:center;height:80vh;">
+  <div style="background:#fff;padding:2rem 2.5rem;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);min-width:320px;">
+    <h2 style="text-align:center;color:var(--primary-color);margin-bottom:1.5rem;">เข้าสู่ระบบ</h2>
+    <form method="post" action="{% url 'auth' %}">
+      {% csrf_token %}
+      <input type="hidden" name="login" value="1">
+      {{ login_form.as_p|default_if_none:'' }}
+      <button type="submit" class="btn-submit" style="width:100%;margin-top:1rem;">เข้าสู่ระบบ</button>
+    </form>
+    <p class="form-link" style="text-align:center;margin-top:1.5rem;">ยังไม่มีบัญชี? <a href="{% url 'register' %}">สมัครสมาชิก</a></p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}เข้าสู่ระบบ / สมัครสมาชิก{% endblock %}
+
+{% block extra_head %}
+<style>
+    #main-content {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+    .form-container {
+        max-width: 500px;
+        margin: 4rem auto;
+        padding: 2rem;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+    }
+    .form-container h1 {
+        text-align: center;
+        color: var(--primary-color);
+        margin-bottom: 2rem;
+    }
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #333;
+        font-weight: 600;
+    }
+    .form-group input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+    }
+    .btn-submit {
+        width: 100%;
+        padding: 0.85rem;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .btn-submit:hover {
+        opacity: 0.9;
+    }
+    .form-link {
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+    .tab-switch {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 2rem;
+    }
+    .tab-btn {
+        background: none;
+        border: none;
+        font-size: 1.1rem;
+        padding: 0.7rem 2rem;
+        cursor: pointer;
+        color: var(--primary-color);
+        border-bottom: 2px solid transparent;
+        transition: border 0.2s;
+    }
+    .tab-btn.active {
+        border-bottom: 2px solid var(--primary-color);
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="color:red;text-align:center;">DEBUG: auth.html content block rendered</div>
+<div class="form-container">
+    <div class="tab-switch">
+        <button id="login-tab" class="tab-btn active" onclick="showTab('login')">เข้าสู่ระบบ</button>
+        <button id="register-tab" class="tab-btn" onclick="showTab('register')">สมัครสมาชิก</button>
+    </div>
+    <div id="login-form-section">
+        <h1>เข้าสู่ระบบ</h1>
+        <form method="post" action="{% url 'auth' %}" id="login-form">
+            {% csrf_token %}
+            {{ login_form.as_p }}
+            <input type="hidden" name="login" value="1">
+            <button type="submit" class="btn-submit">เข้าสู่ระบบ</button>
+        </form>
+        <p class="form-link">ยังไม่มีบัญชี? <a href="#" onclick="showTab('register');return false;">สมัครสมาชิก</a></p>
+    </div>
+    <div id="register-form-section" style="display:none;">
+        <h1>สร้างบัญชีใหม่</h1>
+        <form method="post" action="{% url 'auth' %}" id="register-form">
+            {% csrf_token %}
+            {{ register_form.as_p }}
+            <button type="submit" class="btn-submit">สมัครสมาชิก</button>
+        </form>
+        <p class="form-link">มีบัญชีอยู่แล้ว? <a href="#" onclick="showTab('login');return false;">เข้าสู่ระบบ</a></p>
+    </div>
+</div>
+<script>
+function showTab(tab) {
+    const loginTab = document.getElementById('login-tab');
+    const registerTab = document.getElementById('register-tab');
+    const loginSection = document.getElementById('login-form-section');
+    const registerSection = document.getElementById('register-form-section');
+    if (tab === 'login') {
+        loginTab.classList.add('active');
+        registerTab.classList.remove('active');
+        loginSection.style.display = '';
+        registerSection.style.display = 'none';
+    } else {
+        loginTab.classList.remove('active');
+        registerTab.classList.add('active');
+        loginSection.style.display = 'none';
+        registerSection.style.display = '';
+    }
+    // Save tab to URL hash
+    window.location.hash = tab;
+}
+// On load, set tab from URL hash or query param
+window.addEventListener('DOMContentLoaded', function() {
+    let tab = 'login';
+    if (window.location.search.includes('tab=register') || window.location.hash === '#register') tab = 'register';
+    showTab(tab);
+});
+</script>
+{% endblock %}
