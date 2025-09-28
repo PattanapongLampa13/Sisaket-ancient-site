@@ -1,12 +1,19 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}หน้าหลัก{% endblock %}
+{% block title %}หน้าหลัก | มรดกอีสานใต้{% endblock %}
 
 {% block extra_head %}
 <style>
+    /* กำหนดตัวแปรสีหลัก (สำคัญมาก) */
+    :root {
+        --primary-color: #a04000; /* สีน้ำตาล/ส้มเข้ม (อาจจะหมายถึงสีอิฐ) */
+        --secondary-color: #ff8c00; /* สีส้มสด */
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    
     .hero { 
-        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1593901134647-52a5335287a9?q=80&w=1932&auto=format&fit=crop') no-repeat center center/cover;
+        /* ใช้ภาพหลักเดียวและตั้งค่า Gradient ให้ชัดเจน */
         background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1626088304942-4acaa76a58a3?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover;
         color: white;
         text-align: center;
@@ -103,67 +110,241 @@
     }
 
     .cta-button:hover {
-        background-color: #c9302c; /* Darker shade of primary */
+        background-color: #c9302c; /* Darker shade */
     }
+    /* เพิ่มหรือปรับปรุงตัวแปรสี (ถ้ายังไม่มี) */
+:root {
+    --primary-color: #a04000; /* สีน้ำตาล/ส้มเข้ม */
+    --secondary-color: #ff8c00; /* สีส้มสด */
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ปรับปรุง .featured-places เพื่อให้รองรับ Place-Card แบบใหม่ */
+.featured-places {
+    /* อาจจะต้องปรับ grid-template-columns หรือเปลี่ยนเป็น flex-wrap แทน */
+    display: flex; /* เปลี่ยนเป็น flex เพื่อให้จัดเรียงแนวนอน */
+    flex-wrap: wrap; /* ให้ขึ้นบรรทัดใหม่เมื่อไม่พอ */
+    justify-content: center; /* จัดให้อยู่ตรงกลาง */
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+/* ปรับปรุง place-card ให้เป็นแบบแนวนอน */
+.place-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    /* ***** การเปลี่ยนแปลงหลัก ***** */
+    display: flex; /* ทำให้เนื้อหาภายใน place-card จัดเรียงแนวนอน */
+    width: 100%; /* ใช้ความกว้างเต็ม (สำหรับ Card เดียว) */
+    max-width: 900px; /* จำกัดความกว้างสูงสุดของ Card */
+    height: 350px; /* กำหนดความสูงให้ Card มีขนาดคงที่ */
+    
+    /* หากต้องการให้ Card แสดงผลเป็น 2 หรือ 3 คอลัมน์เหมือนเดิม */
+    /* ให้กำหนด flex-basis แทน width และอาจต้องปรับ max-width ให้เล็กลง */
+    /* flex-basis: calc(50% - 1rem); */ /* เช่น สำหรับ 2 คอลัมน์ */
+}
+
+.place-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+/* ส่วนของรูปภาพภายใน place-card */
+.place-card .place-card-image-wrapper { /* เพิ่ม Wrapper เพื่อควบคุมรูปภาพ */
+    flex: 1; /* ให้รูปภาพใช้พื้นที่ 50% */
+    position: relative;
+    overflow: hidden;
+}
+
+.place-card .place-card-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* เพิ่ม Overlay ที่รูปภาพเพื่อให้เกิดเอฟเฟกต์จางๆ เหมือนในรูป */
+.place-card .place-card-image-wrapper::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* ปรับเป็น 'to left' และกลับลำดับสี */
+    background: linear-gradient(to left, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.0) 50%);
+    z-index: 1;
+}
+
+
+/* ส่วนเนื้อหาข้อความภายใน place-card */
+.place-card-content {
+    flex: 1; /* ให้เนื้อหาข้อความใช้พื้นที่ 50% */
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-direction: column; /* จัดเรียงข้อความในแนวตั้ง */
+    justify-content: center; /* จัดข้อความให้อยู่กึ่งกลางในแนวตั้ง */
+}
+
+.place-card-content h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+    font-size: 1.8em; /* ทำให้หัวข้อใหญ่ขึ้น */
+    margin-bottom: 0.5rem;
+}
+
+.place-card-content p {
+    font-size: 1.1em;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* CSS สำหรับ Hero, Section-title, Intro-text และ CTA อื่นๆ ยังคงเดิม */
+.place-card {
+    /* ... โค้ดเดิม ... */
+    display: flex;
+    flex-direction: row-reverse; /* สลับลำดับให้รูปภาพ (ที่เขียนไว้หลังข้อความ) มาอยู่ซ้าย */
+    /* ... โค้ดเดิม ... */
+}
+
 </style>
 {% endblock %}
 
 {% block content %}
 <section class="hero">
-    <h1>ยินดีต้อนรับสู่ศรีสะเกษ</h1>
-    <p>ดินแดนแห่งวัฒนธรรมอีสานใต้และธรรมชาติอันงดงาม</p>
-    <h1>ทุเรียนภูเขาไฟศรีสะเกษ</h1>
-    <p>ราชาแห่งผลไม้จากดินแดนภูเขาไฟโบราณ</p>
+    <h1>ค้นพบเส้นทางอารยธรรม</h1>
+    <p>ปราสาทขอมโบราณ แห่งอีสานใต้</p>
 </section>
 
 <section class="introduction">
-    <h2 class="section-title">มนต์เสน่ห์แห่งศรีสะเกษ</h2>
-    <h2 class="section-title">เอกลักษณ์ที่ไม่เหมือนใคร</h2>
+    <h2 class="section-title">ศรีสะเกษ</h2>
     <p class="intro-text">
-        ศรีสะเกษ จังหวัดทางภาคตะวันออกเฉียงเหนือตอนล่างของประเทศไทย เป็นที่รู้จักกันดีในนาม "เมืองดอกลำดวน" ที่นี่เต็มไปด้วยประวัติศาสตร์อันยาวนาน วัฒนธรรมที่เป็นเอกลักษณ์ของชาวเขมร กูย ลาว และเยอ รวมถึงธรรมชาติที่ยังคงความอุดมสมบูรณ์ รอให้คุณมาสัมผัส
-        ทุเรียนภูเขาไฟศรีสะเกษเติบโตบนดินที่อุดมด้วยแร่ธาตุจากภูเขาไฟโบราณนับล้านปี ทำให้ได้ทุเรียนที่มีรสชาติหวานมัน กลิ่นหอมละมุนไม่ฉุน เนื้อเนียนละเอียด แห้ง และเส้นใยน้อย เป็นสมบัติล้ำค่าที่ธรรมชาติมอบให้ชาวศรีสะเกษ
+        หลวงพ่อโตคู่บ้าน ถิ่นฐานปราสาทขอม ข้าวหอมกระเทียมดี มีสวนสมเด็จ เขตดงลำดวน หลากล้วนวัฒนธรรม เลิศล้ำสามัคคี
     </p>
 </section>
 
 <section class="featured">
-    <h2 class="section-title">สถานที่ท่องเที่ยวแนะนำ</h2>
-    <h2 class="section-title">สวนทุเรียนแนะนำ</h2>
+    <h2 class="section-title">สถานที่</h2>
     <div class="featured-places">
+        
         <div class="place-card">
-            <img src="https://images.unsplash.com/photo-1624484250239-779a7a615239?q=80&w=1974&auto=format&fit=crop" alt="วัดล้านขวด">
-            <img src="https://images.unsplash.com/photo-1588313690362-99924b33b8a3?q=80&w=1974&auto=format&fit=crop" alt="สวนทุเรียน">
+            <div class="place-card-image-wrapper">
+                <img src="static/images/location/ปราสาทโดนตวลPNG.png" alt="ปราสาทโดนตวล">
+            </div>
             <div class="place-card-content">
-                <h3>วัดล้านขวด</h3>
-                <p>ชมความมหัศจรรย์ของสถาปัตยกรรมที่สร้างจากขวดแก้วรีไซเคิลนับล้านใบ</p>
-                <h3>สวนป้าแก้ว</h3>
-                <p>สวนทุเรียนออร์แกนิกบรรยากาศดี เปิดให้เข้าชมและชิมทุเรียนสดๆ จากต้น</p>
+                <h3>ปราสาทโดนตวล</h3>
+                <p>สร้างขึ้นในราวพุทธศตวรรษที่ 16 มีลักษณะเป็นปรางค์เดี่ยว ก่อด้วยศิลาแลงและอิฐ สันนิษฐานว่าสร้างขึ้นเพื่อเป็นเทวสถาน ภายในปราสาทมีปรางค์หลัก บรรณาลัย และสระน้ำโบราณ ปัจจุบันเป็นแหล่งท่องเที่ยวทางประวัติศาสตร์และเป็นสถานที่ประกอบพิธีบวงสรวงประจำปีของคนในพื้นที่</p>
+            </div>
+        </div>
+
+        <div class="place-card">
+            <div class="place-card-image-wrapper">
+                <img src="static/images/location/ปราสาทสระกำแพงใหญ่PNG.png" alt="ปราสาทสระกำแพงใหญ่">
+            </div>
+            <div class="place-card-content">
+                <h3>ปราสาทสระกำแพงใหญ่</h3>
+                <p>ปราสาทหินที่ใหญ่และสมบูรณ์ที่สุดในศรีสะเกษ สร้างเป็นเทวสถานในศาสนาฮินดูก่อน แล้วจึงเปลี่ยนเป็นพุทธสถานมหายานในสมัยพระเจ้าชัยวรมันที่ 7 พบหลักฐานสำคัญคือ ทับหลังนารายณ์บรรทมสินธุ์ และพระพุทธรูปปางนาคปรก</p>
             </div>
         </div>
         <div class="place-card">
-            <img src="https://images.unsplash.com/photo-1583244275998-c23ef5595f19?q=80&w=1974&auto=format&fit=crop" alt="ผามออีแดง">
-            <img src="https://images.unsplash.com/photo-1609842846309-db0383b8a834?q=80&w=1974&auto=format&fit=crop" alt="บุฟเฟ่ต์ทุเรียน">
+            <div class="place-card-image-wrapper">
+                <img src="static/images/location/ปราสาทสระกำแพงน้อยPNG.png" alt="ปราสาทสระกำแพงน้อย">
+            </div>
             <div class="place-card-content">
-                <h3>ผามออีแดง</h3>
-                <p>จุดชมวิวพระอาทิตย์ขึ้นสามแผ่นดิน พร้อมภาพแกะสลักนูนต่ำอายุนับพันปี</p>
-                <h3>ไร่ลุงหนวด</h3>
-                <p>มีชื่อเสียงด้านบุฟเฟ่ต์ทุเรียนภูเขาไฟ อิ่มอร่อยได้ไม่อั้นในช่วงฤดูกาล</p>
+                <h3>ปราสาทสระกำแพงน้อย</h3>
+                <p>สันนิษฐานว่าเป็น "อโรคยศาล" หรือสถานพยาบาลที่สร้างตามคติพระโพธิสัตว์ในสมัยพระเจ้าชัยวรมันที่ 7 ลักษณะเป็นปราสาทก่อด้วยศิลาแลงทั้งหลัง มีปรางค์ประธาน 1 องค์</p>
             </div>
         </div>
         <div class="place-card">
-            <img src="https://images.unsplash.com/photo-1518428548399-34313a199f7a?q=80&w=1974&auto=format&fit=crop" alt="ทุ่งดอกกระเจียว">
-            <img src="https://images.unsplash.com/photo-1618837521268-9176527a4a28?q=80&w=1974&auto=format&fit=crop" alt="แปรรูปทุเรียน">
+            <div class="place-card-image-wrapper">
+                <img src="static/images/location/ปราสาทปรางค์กู่PNG.png" alt="ปราสาทปรางค์กู่">
+            </div>
             <div class="place-card-content">
-                <h3>อุทยานแห่งชาติเขาพระวิหาร</h3>
-                <p>สัมผัสธรรมชาติอันอุดมสมบูรณ์และเส้นทางเดินป่าที่ท้าทาย</p>
-                <h3>กลุ่มวิสาหกิจชุมชน</h3>
-                <p>แหล่งรวมผลิตภัณฑ์แปรรูปจากทุเรียน เช่น ทุเรียนทอด ทุเรียนกวน และอีกมากมาย</p>
+                <h3>ปราสาทปรางค์กู่</h3>
+                <p>สันนิษฐานว่าเป็น "ธรรมศาลา" หรือที่พักคนเดินทาง (รวม 121 แห่งที่พระเจ้าชัยวรมันที่ 7 ทรงสร้าง) ตัวปราสาทประกอบด้วยปรางค์ 3 องค์ เรียงเป็นแนวเหนือ-ใต้ บนฐานศิลาแลง อาคารหลักสร้างด้วยอิฐผสมศิลาแลง</p>
             </div>
         </div>
+        <div class="place-card">
+            <div class="place-card-image-wrapper">
+                <img src="static/images/location/ปราสาทเมืองจันทร์PNG.png" alt="ปราสาทเมืองจันทร์">
+            </div>
+            <div class="place-card-content">
+                <h3>ปราสาทเมืองจันทร์</h3>
+                <p>เป็นโบราณสถานที่ได้รับการประกาศขึ้นทะเบียน มีร่องรอยของชุมชนโบราณในบริเวณใกล้เคียง มีการขึ้นทะเบียนเมื่อปี พ.ศ. 2557</p>
+            </div>
+        </div>
+
+        <div class="place-card">
+            <div class="place-card-image-wrapper">
+                <img src="static/images/location/ปราสาทเยอPNG.png" alt="ปราสาทเยอ">
+            </div>
+            <div class="place-card-content">
+                <h3>ปราสาทเยอ</h3>
+                <p>ได้รับการประกาศขึ้นทะเบียนเป็นโบราณสถานเมื่อปี พ.ศ. 2478 ตั้งอยู่ในเขตอำเภอขุขันธ์</p>
+            </div>
+        </div>
+        <div class="place-card">
+            <div class="place-card-image-wrapper">
+                <img src="static/images/location/ปราสาททามจานPNG.png" alt="ปราสาททามจาน">
+            </div>
+            <div class="place-card-content">
+                <h3>ปราสาททามจาน</h3>
+                <p>ได้รับการประกาศขึ้นทะเบียนเป็นโบราณสถานเมื่อปี พ.ศ. 2478 ตั้งอยู่ในเขตอำเภอบึงบูรพ์ (หรืออาจมีชื่อเรียกอีกชื่อว่าปราสาทบ้านสมอ)</p>
+            </div>
+        </div>
+        <div class="place-card">
+            <div class="place-card-image-wrapper">
+                <img src="static/images/location/ปราสาทตาเล็งPNG.png" alt="ปราสาทตาเล็ง">
+            </div>
+            <div class="place-card-content">
+                <h3>ปราสาทตาเล็ง</h3>
+                <p>ได้รับการประกาศขึ้นทะเบียนเป็นโบราณสถานเมื่อปี พ.ศ. 2478 (อาจมีชื่อเรียกอีกชื่อว่าปราสาทตำหนักไทร)</p>
+            </div>
+        </div>
+        <div class="place-card">
+            <div class="place-card-image-wrapper">
+                <img src="static/images/location/พระธาตุเมืองจันทร์PNG.png" alt="พระธาตุเมืองจันทร์">
+            </div>
+            <div class="place-card-content">
+                <h3>พระธาตุเมืองจันทร์</h3>
+                <p>ข้อมูลไม่ชัดเจน คาดว่าเกี่ยวข้องกับศาสนาพุทธในยุคหลัง ตัวเมืองจันทร์เป็นชุมชนโบราณขนาดใหญ่</p>
+            </div>
+        </div>
+        <div class="place-card">
+            <div class="place-card-image-wrapper">
+                <img src="static/images/location/ปรางค์กู่สมบูรณ์PNG.png" alt="ปรางค์กู่สมบูรณ์">
+            </div>
+            <div class="place-card-content">
+                <h3>ปรางค์กู่สมบูรณ์</h3>
+                <p>เป็นโบราณสถานขนาดเล็ก ตั้งอยู่ที่บ้านหนองคู ได้รับการประกาศขึ้นทะเบียนในปี พ.ศ. 2552</p>
+            </div>
+        </div>
+        <div class="place-card">
+            <div class="place-card-image-wrapper">
+                <img src="static/images/location/โบราณสถานพระธาตุบรรจุอัฐิPNG.png" alt="โบราณสถานพระธาตุบรรจุอัฐิ">
+            </div>
+            <div class="place-card-content">
+                <h3>โบราณสถานพระธาตุบรรจุอัฐิ</h3>
+                <p>ข้อมูลไม่ชัดเจน อาจเป็นเจดีย์หรือธาตุที่บรรจุอัฐิของบุคคลสำคัญ หรือเป็นพระธาตุเจดีย์ตามความเชื่อท้องถิ่น</p>
+            </div>
+        </div>
+        <div class="place-card">
+            <div class="place-card-image-wrapper">
+                <img src="static/images/location/ปราสาทตำหนักไทรPNG.png" alt="ปราสาทตำหนักไทร">
+            </div>
+            <div class="place-card-content">
+                <h3>ปราสาทตำหนักไทร</h3>
+                <p>ปราสาทตำหนักไทร เป็นโบราณสถานที่ได้รับการประกาศขึ้นทะเบียนโบราณสถานปี พ.ศ. 2478</p>
+            </div>
+        </div>
+        
+        
+        
     </div>
 </section>
 
-<section class="cta-section">
-    <a href="/places" class="cta-button">ค้นหาสถานที่ท่องเที่ยวทั้งหมด</a>
-    <a href="/places" class="cta-button">ค้นหาสวนทุเรียนทั้งหมด</a>
-</section>
 {% endblock %}
