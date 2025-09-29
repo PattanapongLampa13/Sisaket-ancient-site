@@ -16,10 +16,12 @@ def about(request):
     return render(request, 'about.html')
 
 def map_view(request):
-    return render(request, 'map.html')
+    api_key = os.environ.get('GOOGLE_MAPS_API_KEY')
+    return render(request, 'map.html', {'api_key': api_key})
 
 def places(request):
-    return render(request, 'places.html')
+    api_key = os.environ.get('GOOGLE_MAPS_API_KEY')
+    return render(request, 'places.html', {'api_key': api_key})
 
 @csrf_exempt
 def register(request):
