@@ -61,7 +61,7 @@ def temple_detail_map(request, temple_name):
         'temple_lng': temple['lng'],
     }
     
-    return render(request, 'temple_detail_simple.html', context)
+    return render(request, 'temple_detail_map.html', context)
 
 @csrf_exempt
 def register(request):

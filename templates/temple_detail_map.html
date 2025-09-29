@@ -232,10 +232,22 @@
         background: transparent !important;
         border: none !important;
     }
+
+    /* Override base template conflicts */
+    .temple-page-content {
+        position: relative;
+        z-index: 100;
+    }
+
+    /* Ensure map loads after base template */
+    #temple-map-container {
+        min-height: 400px;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
+<div class="temple-page-content">
 <a href="/" class="back-button" onclick="event.stopPropagation();">
     <i class="fas fa-arrow-left"></i>
     กลับหน้าหลัก
@@ -248,11 +260,14 @@
 
 <div class="temple-info">
     <div class="temple-details">
-        {% if temple.image %}
-        <img src="{% get_static_prefix %}{{ temple.image|slice:'7:' }}" alt="{{ temple.name }}" class="temple-image" onerror="this.style.display='none'">
-        {% endif %}
-        
-        <div class="detail-item">
+                {% if temple.image %}
+                            {% if temple.image %}
+            <img src="{% static '' %}{{ temple.image|slice:'7:' }}" 
+                 alt="{{ temple.name }}" 
+                 style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px; margin-bottom: 8px;"
+                 onerror="this.style.display='none'">
+            {% endif %}
+                {% endif %}        <div class="detail-item">
             <span class="detail-label">ตำบล/อปท.</span>
             <div class="detail-value">{{ temple.organization|default:"ไม่ระบุ" }}</div>
         </div>
@@ -309,7 +324,7 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+function initTempleMap() {
     // Hide loading, show map
     document.getElementById('loading').style.display = 'none';
     document.getElementById('map').style.display = 'block';
@@ -391,7 +406,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Map initialization error:', error);
         handleMapError();
     }
-});
+}
 
 // Error handling for map loading
 function handleMapError() {
@@ -411,5 +426,10 @@ function handleMapError() {
     document.getElementById('loading').style.display = 'block';
     document.getElementById('map').style.display = 'none';
 }
+
+// Wait for base template to finish loading before initializing map
+setTimeout(function() {
+    document.addEventListener('DOMContentLoaded', initTempleMap);
+}, 500);
 </script>
 {% endblock %}
