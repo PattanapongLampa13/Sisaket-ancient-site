@@ -260,14 +260,12 @@
 
 <div class="temple-info">
     <div class="temple-details">
-                {% if temple.image %}
-                            {% if temple.image %}
-            <img src="{% static '' %}{{ temple.image|slice:'7:' }}" 
-                 alt="{{ temple.name }}" 
-                 style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px; margin-bottom: 8px;"
-                 onerror="this.style.display='none'">
-            {% endif %}
-                {% endif %}        <div class="detail-item">
+        {% if temple.image %}
+        <img src="{% static '' %}{{ temple.image|slice:'7:' }}" 
+             alt="{{ temple.name }}" 
+             class="temple-image"
+             onerror="this.style.display='none'">
+        {% endif %}        <div class="detail-item">
             <span class="detail-label">ตำบล/อปท.</span>
             <div class="detail-value">{{ temple.organization|default:"ไม่ระบุ" }}</div>
         </div>
@@ -329,7 +327,7 @@ function initTempleMap() {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('map').style.display = 'block';
     
-    const templeLocation = [{{ temple_lat }}, {{ temple_lng }}];
+    const templeLocation = [{{ temple.lat }}, {{ temple.lng }}];
     
     try {
         // Initialize map with OpenStreetMap
@@ -378,7 +376,7 @@ function initTempleMap() {
                     {{ temple.name }}
                 </h3>
                 {% if temple.image %}
-                <img src="{% get_static_prefix %}{{ temple.image|slice:'7:' }}" 
+                <img src="{% static '' %}{{ temple.image|slice:'7:' }}" 
                      alt="{{ temple.name }}" 
                      style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px; margin-bottom: 8px;"
                      onerror="this.style.display='none'">
@@ -427,9 +425,11 @@ function handleMapError() {
     document.getElementById('map').style.display = 'none';
 }
 
-// Wait for base template to finish loading before initializing map
-setTimeout(function() {
+// Initialize map when page is ready
+if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initTempleMap);
-}, 500);
+} else {
+    initTempleMap();
+}
 </script>
 {% endblock %}
