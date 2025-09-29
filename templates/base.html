@@ -146,7 +146,7 @@
     <!-- Intro Animation -->
     <div id="intro-container">
         <div id="intro-center">
-            <img id="intro-image" src="{% static 'images/prasat.jpg' %}" alt="Prasat">
+            <img id="intro-image" src="{% static 'images/SSK.png' %}" alt="Prasat">
             <h1 id="intro-text">โบราณสถานจังหวัดศรีสะเกษ</h1>
         </div>
     </div>
@@ -211,7 +211,12 @@
         setTimeout(() => { introContainer.style.opacity = 0; }, 3500);
         setTimeout(() => {
             introContainer.style.display = 'none';
-            introTopLeft.style.opacity = 1;
+
+            // Move the content to the header placeholder
+            const logoPlaceholder = document.getElementById('logo-placeholder');
+            logoPlaceholder.innerHTML = introTopLeft.innerHTML;
+            introTopLeft.style.display = 'none'; // Hide the original
+
             mainContent.classList.remove('hidden');
             mainContent.classList.add('fade-in');
             body.classList.remove('no-scroll');

@@ -78,7 +78,7 @@ body.no-scroll {
     top: 1rem;
     left: 2rem;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     opacity: 0;
     transition: opacity 1s ease-in-out;
     z-index: 1001; /* Above header */
@@ -126,6 +126,11 @@ body.no-scroll {
     position: sticky;
     top: 0;
     z-index: 1000;
+}
+
+.logo {
+    display: flex;
+    align-items: baseline;
 }
 
 .logo a {
