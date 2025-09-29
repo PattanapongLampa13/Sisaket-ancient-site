@@ -24,5 +24,6 @@ urlpatterns = [
     path("about/", views.about, name="about"),
     path("map/", views.map_view, name="map"),
     path("places/", views.places, name="places"),
+    path("temple/<str:temple_name>/", views.temple_detail_map, name="temple_detail_map"),
     path("register/", views.register, name="register"),
 ]

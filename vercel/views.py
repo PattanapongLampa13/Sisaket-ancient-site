@@ -1,7 +1,7 @@
 import os
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 import json
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
@@ -22,6 +22,46 @@ def map_view(request):
 def places(request):
     api_key = os.environ.get('GOOGLE_MAPS_API_KEY')
     return render(request, 'places.html', {'api_key': api_key})
+
+def temple_detail_map(request, temple_name):
+    """Display individual temple location on map"""
+    # Load temple data from JSON file
+    with open('data.json', 'r', encoding='utf-8') as file:
+        data = json.load(file)
+    
+    # Find the temple by name
+    temple_data = None
+    for site in data['ancient_sites_sisaket']:
+        if site['ชื่อสถานที่'] == temple_name:
+            temple_data = site
+            break
+    
+    if not temple_data:
+        raise Http404("Temple not found")
+    
+    # Get API key
+    api_key = os.environ.get('GOOGLE_MAPS_API_KEY', 'YOUR_API_KEY_HERE')
+    
+    # Convert Thai field names to English for template compatibility
+    temple = {
+        'name': temple_data['ชื่อสถานที่'],
+        'district': temple_data['อำเภอ'],
+        'province': temple_data['จังหวัด'],
+        'address': temple_data['ที่อยู่'],
+        'lat': temple_data['LAT'],
+        'lng': temple_data['LONG'],
+        'image': temple_data['image'],
+        'organization': temple_data.get('อปท.', temple_data.get('ตำบล', '')),
+    }
+    
+    context = {
+        'temple': temple,
+        'api_key': api_key,
+        'temple_lat': temple['lat'],
+        'temple_lng': temple['lng'],
+    }
+    
+    return render(request, 'temple_detail_simple.html', context)
 
 @csrf_exempt
 def register(request):
