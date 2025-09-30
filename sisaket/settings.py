@@ -147,12 +147,8 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
-# STATIC_ROOT = BASE_DIR / "staticfiles"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles_build", "static")
-
-# ใช้ Whitenoise สำหรับ production เท่านั้น
-if not DEBUG:
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# This is the directory where collectstatic will gather all static files.
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
 # Default primary key field type
