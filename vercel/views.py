@@ -21,7 +21,13 @@ def map_view(request):
 
 def places(request):
     api_key = os.environ.get('GOOGLE_MAPS_API_KEY')
-    return render(request, 'places.html', {'api_key': api_key})
+    with open('data.json', 'r', encoding='utf-8') as file:
+        data = json.load(file)
+    context = {
+        'sites': data['ancient_sites_sisaket'],
+        'api_key': api_key
+    }
+    return render(request, 'places.html', context)
 
 def temple_detail_map(request, temple_name):
     """Display individual temple location on map"""
