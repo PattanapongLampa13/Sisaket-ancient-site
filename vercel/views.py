@@ -23,8 +23,15 @@ def places(request):
     api_key = os.environ.get('GOOGLE_MAPS_API_KEY')
     with open('data.json', 'r', encoding='utf-8') as file:
         data = json.load(file)
+    
+    # Pre-construct the full image path for each site
+    sites_with_paths = []
+    for site in data['ancient_sites_sisaket']:
+        site['full_image_path'] = f"images/location/{site['image']}"
+        sites_with_paths.append(site)
+
     context = {
-        'sites': data['ancient_sites_sisaket'],
+        'sites': sites_with_paths,
         'api_key': api_key
     }
     return render(request, 'places.html', context)
