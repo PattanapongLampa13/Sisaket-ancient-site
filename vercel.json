@@ -1,10 +1,14 @@
 {
-  "buildCommand": "uv pip install -r requirements.txt && python manage.py collectstatic --no-input",
+  "buildCommand": "uv pip install -r requirements.txt && python sisaket/manage.py collectstatic --no-input",
   "outputDirectory": "staticfiles",
   "rewrites": [
     {
       "source": "/(.*)",
       "destination": "sisaket/wsgi.py"
     }
-  ]
+  ],
+  "env": {
+    "DJANGO_SETTINGS_MODULE": "sisaket.settings",
+    "PYTHONUNBUFFERED": "1"
+  }
 }
