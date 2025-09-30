@@ -29,3 +29,7 @@ urlpatterns = [
     path("temple/<str:temple_name>/", views.temple_detail_map, name="temple_detail_map"),
     path("register/", views.register, name="register"),
 ]
+
+# เพิ่มส่วนนี้เพื่อให้บริการ static files ในโหมด Production (Vercel) โดยใช้ Whitenoise
+if not settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
