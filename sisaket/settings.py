@@ -27,7 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-qrkgoccx02wd8gd-i0d#p4ez00z#yu(vm+xsm#a@69cp!$@j3q')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG") == "1"
+# ตั้งค่า DEBUG ให้เป็น True สำหรับ local development และใช้ env var สำหรับ production
+# ถ้าไม่มี VERCEL_ENV หรือค่าไม่ใช่ 'production' ให้ DEBUG เป็น True
+DEBUG = os.environ.get('VERCEL_ENV') != 'production'
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -139,13 +141,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "/static/"
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 # STATIC_ROOT = BASE_DIR / "staticfiles"
-STATIC_ROOT = BASE_DIR / "staticfiles_build" / "static"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles_build", "static")
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# ใช้ Whitenoise สำหรับ production เท่านั้น
+if not DEBUG:
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

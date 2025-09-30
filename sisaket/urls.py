@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from vercel import views
+from django.conf import settings             # 1. import settings
+from django.conf.urls.static import static   # 2. import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -27,3 +29,7 @@ urlpatterns = [
     path("temple/<str:temple_name>/", views.temple_detail_map, name="temple_detail_map"),
     path("register/", views.register, name="register"),
 ]
+
+# เพิ่มส่วนนี้เพื่อให้บริการ static files ในโหมด development
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
