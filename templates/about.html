@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}เกี่ยวกับเรา{% endblock %}
+
+{% block extra_head %}
+<style>
+    .about-header {
+        text-align: center;
+        padding: 4rem 2rem;
+        background-color: #f7f7f7;
+        border-radius: 8px;
+        margin-bottom: 3rem;
+    }
+
+    .about-header h1 {
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .about-header p {
+        font-size: 1.25rem;
+        color: #555;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .mission-section {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+    }
+
+    .mission-section img {
+        max-width: 40%;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="about-header">
+    <h1>เกี่ยวกับ โบราณสถานศรีสะเกษ</h1>
+    {% comment %} <p>คู่มือสำหรับคนรักทุเรียนภูเขาไฟฉบับสมบูรณ์ที่สุด</p> {% endcomment %}
+</section>
+
+<section class="mission-section">
+    <img src="{% static 'images/prasat.jpg' %}" alt="Sisaket">
+    <div>
+        <h2>ภารกิจของเรา</h2>
+        <p>
+            เราต้องการให้รู้จักกับโบราณสถานในจังหวัดศรีสะเกษที่มีมากกว่า10ในจังหวัดศรีสะเกษ ทั้งปราสาทหินโบราณอายุเกือบพันปีและพระธาตุในชุมชนท้องถิ่น
+        </p>
+        <p>
+            และหวังว่าจะเป็นอีกข้อมูลสำหรับการสำรวจแหล่งโบราณสถานในไทยเพื่อโปรโมทการท่องเที่ยวและวัฒนธรรมภายในประเทศไทย
+        </p>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ temple.name }} - แผนที่ตำแหน่ง</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: #f5f5f5;
+            line-height: 1.6;
+        }
+        
+        :root {
+            --primary-color: #a04000;
+            --secondary-color: #ff8c00;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .temple-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .temple-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .temple-info {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .temple-details {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+
+        .temple-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .detail-item {
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-value {
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .coordinates {
+            background: #f8f9fa;
+            padding: 0.75rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .map-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .map-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .view-google-maps {
+            background: #4285f4;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .view-google-maps:hover {
+            background: #3367d6;
+            transform: translateY(-1px);
+            color: white;
+            text-decoration: none;
+        }
+
+        #map {
+            width: 100%;
+            height: 400px;
+            border-radius: 8px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 25px;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background-color: #8b3600;
+            color: white;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+        .leaflet-div-icon {
+            background: transparent !important;
+            border: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .temple-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .temple-header h1 {
+                font-size: 2rem;
+            }
+            
+            .map-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            กลับหน้าหลัก
+        </a>
+
+        <div class="temple-header">
+            <h1>{{ temple.name }}</h1>
+        </div>
+
+        <div class="temple-info">
+            <div class="temple-details">
+                {% if temple.image %}
+                <img src="{{ temple.image }}" alt="{{ temple.name }}" class="temple-image" onerror="this.style.display='none'">
+                {% endif %}
+                
+                <div class="detail-item">
+                    <span class="detail-label">ตำบล/อปท.</span>
+                    <div class="detail-value">{{ temple.organization|default:"ไม่ระบุ" }}</div>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">อำเภอ</span>
+                    <div class="detail-value">{{ temple.district }}</div>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">จังหวัด</span>
+                    <div class="detail-value">{{ temple.province }}</div>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">ที่อยู่</span>
+                    <div class="detail-value">{{ temple.address }}</div>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">พิกัดทางภูมิศาสตร์</span>
+                    <div class="coordinates">
+                        <div><strong>ละติจูด:</strong> {{ temple.lat|floatformat:6 }}</div>
+                        <div><strong>ลองจิจูด:</strong> {{ temple.lng|floatformat:6 }}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="map-container">
+                <div class="map-header">
+                    <div class="map-title">
+                        <i class="fas fa-map-marked-alt"></i> ตำแหน่งที่ตั้ง
+                    </div>
+                    <a href="https://www.google.com/maps?q={{ temple.lat }},{{ temple.lng }}&hl=th&z=15" 
+                       target="_blank" 
+                       class="view-google-maps">
+                        <i class="fab fa-google"></i>
+                        ดูใน Google Maps
+                    </a>
+                </div>
+                
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const templeLocation = [{{ temple_lat }}, {{ temple_lng }}];
+        
+        try {
+            // Initialize map with OpenStreetMap
+            const map = L.map('map').setView(templeLocation, 15);
+            
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19,
+            }).addTo(map);
+            
+            // Custom temple icon
+            const templeIcon = L.divIcon({
+                html: `
+                    <div style="
+                        background: #a04000;
+                        border: 2px solid #ff8c00;
+                        border-radius: 50%;
+                        width: 40px;
+                        height: 40px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: white;
+                        font-size: 16px;
+                        font-weight: bold;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                    ">🏛️</div>
+                `,
+                iconSize: [40, 40],
+                iconAnchor: [20, 20],
+                popupAnchor: [0, -20],
+                className: 'custom-temple-icon'
+            });
+            
+            // Create marker
+            const marker = L.marker(templeLocation, { 
+                icon: templeIcon,
+                title: '{{ temple.name }}'
+            }).addTo(map);
+            
+            // Create popup content
+            const popupContent = `
+                <div style="max-width: 280px; font-family: 'Kanit', sans-serif;">
+                    <h3 style="color: #a04000; margin-bottom: 10px; font-size: 1.1em;">
+                        {{ temple.name }}
+                    </h3>
+                    <div style="font-size: 0.9em; color: #555; line-height: 1.4;">
+                        <p style="margin: 5px 0;"><strong>อำเภอ:</strong> {{ temple.district }}</p>
+                        <p style="margin: 5px 0;"><strong>จังหวัด:</strong> {{ temple.province }}</p>
+                        <p style="margin: 5px 0; font-size: 0.8em; color: #777;">{{ temple.address }}</p>
+                        <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #eee; font-size: 0.8em; color: #999;">
+                            📍 {{ temple.lat|floatformat:6 }}, {{ temple.lng|floatformat:6 }}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Bind popup to marker
+            marker.bindPopup(popupContent, { maxWidth: 300, minWidth: 250 });
+            
+            // Auto-open popup after a short delay
+            setTimeout(() => {
+                marker.openPopup();
+            }, 1000);
+            
+            console.log('Map initialized successfully');
+            
+        } catch (error) {
+            console.error('Map initialization error:', error);
+            document.getElementById('map').innerHTML = `
+                <div style="display: flex; justify-content: center; align-items: center; height: 100%; background: #f8f9fa; border-radius: 8px; flex-direction: column; color: #666;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: #ff8c00; margin-bottom: 1rem;"></i>
+                    <p>ไม่สามารถโหลดแผนที่ได้</p>
+                    <a href="https://www.google.com/maps?q={{ temple.lat }},{{ temple.lng }}&hl=th&z=15" 
+                       target="_blank" 
+                       style="margin-top: 1rem; padding: 0.75rem 1.5rem; background: #4285f4; color: white; text-decoration: none; border-radius: 4px;">
+                        <i class="fab fa-google"></i> เปิดใน Google Maps
+                    </a>
+                </div>
+            `;
+        }
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}สถานที่ท่องเที่ยว{% endblock %}
+
+{% block extra_head %}
+<style>
+    .page-header {
+        text-align: center;
+        padding: 3rem 2rem;
+        background-color: #f7f7f7;
+        border-radius: 8px;
+        margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .page-header p {
+        font-size: 1.25rem;
+        color: #555;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .places-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .place-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .place-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        cursor: pointer;
+    }
+
+    .view-location-btn {
+        margin-top: 1rem;
+        padding: 0.75rem 1rem;
+        background: linear-gradient(135deg, #a04000, #ff8c00);
+        color: white;
+        border-radius: 25px;
+        text-align: center;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(160, 64, 0, 0.3);
+    }
+
+    .place-card:hover .view-location-btn {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(160, 64, 0, 0.4);
+    }
+
+    .place-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .place-card-content {
+        padding: 1.5rem;
+        flex-grow: 1;
+    }
+
+    .place-card-content h3 {
+        margin-top: 0;
+        color: var(--primary-color);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>ปราสาทศรีสะเกษ</h1>
+    <p>ค้นหาปราสาทศรีสะเกษ</p>
+</section>
+
+<section class="places-list">
+    <div class="places-grid">
+        <!-- ตัวอย่างการ์ดสถานที่ท่องเที่ยว -->
+        <div class="place-card" onclick="window.location.href='/temple/ปราสาทโดนตวล/'" style="cursor: pointer;">
+            <img src="{% static 'images/location/ปราสาทโดนตวลPNG.png' %}" alt="ปราสาทโดนตวล">
+            <div class="place-card-content">
+                <h3>ปราสาทโดนตวล</h3>
+                <p>สร้างขึ้นในราวพุทธศตวรรษที่ 16 มีลักษณะเป็นปรางค์เดี่ยว ก่อด้วยศิลาแลงและอิฐ สันนิษฐานว่าสร้างขึ้นเพื่อเป็นเทวสถาน ภายในปราสาทมีปรางค์หลัก บรรณาลัย และสระน้ำโบราณ ปัจจุบันเป็นแหล่งท่องเที่ยวทางประวัติศาสตร์และเป็นสถานที่ประกอบพิธีบวงสรวงประจำปีของคนในพื้นที่</p>
+                <div class="view-location-btn">
+                    <i class="fas fa-map-marker-alt"></i> ดูตำแหน่งบนแผนที่
+                </div>
+            </div>
+        </div>
+        <div class="place-card" onclick="window.location.href='/temple/ปราสาทสระกำแพงใหญ่/'" style="cursor: pointer;">
+            <img src="{% static 'images/location/ปราสาทสระกำแพงใหญ่PNG.png' %}" alt="ปราสาทสระกำแพงใหญ่">
+            <div class="place-card-content">
+                <h3>ปราสาทสระกำแพงใหญ่</h3>
+                <p>ปราสาทหินที่ใหญ่และสมบูรณ์ที่สุดในศรีสะเกษ สร้างเป็นเทวสถานในศาสนาฮินดูก่อน แล้วจึงเปลี่ยนเป็นพุทธสถานมหายานในสมัยพระเจ้าชัยวรมันที่ 7 พบหลักฐานสำคัญคือ ทับหลังนารายณ์บรรทมสินธุ์ และพระพุทธรูปปางนาคปรก</p>
+                <div class="view-location-btn">
+                    <i class="fas fa-map-marker-alt"></i> ดูตำแหน่งบนแผนที่
+                </div>
+            </div>
+        </div>
+        <div class="place-card" onclick="window.location.href='/temple/ปราสาทสระกำแพงน้อย/'" style="cursor: pointer;">
+            <img src="{% static 'images/location/ปราสาทสระกำแพงน้อยPNG.png' %}" alt="ปราสาทสระกำแพงน้อย">
+            <div class="place-card-content">
+                <h3>ปราสาทสระกำแพงน้อย</h3>
+                <p>สันนิษฐานว่าเป็น "อโรคยศาล" หรือสถานพยาบาลที่สร้างตามคติพระโพธิสัตว์ในสมัยพระเจ้าชัยวรมันที่ 7 ลักษณะเป็นปราสาทก่อด้วยศิลาแลงทั้งหลัง มีปรางค์ประธาน 1 องค์</p>
+                <div class="view-location-btn">
+                    <i class="fas fa-map-marker-alt"></i> ดูตำแหน่งบนแผนที่
+                </div>
+            </div>
+        </div>
+        <div class="place-card" onclick="window.location.href='/temple/ปราสาทปรางค์กู่/'" style="cursor: pointer;">
+            <img src="{% static 'images/location/ปราสาทปรางค์กู่PNG.png' %}" alt="ปราสาทปรางค์กู่">
+            <div class="place-card-content">
+                <h3>ปราสาทปรางค์กู่</h3>
+                <p>สันนิษฐานว่าเป็น "ธรรมศาลา" หรือที่พักคนเดินทาง (รวม 121 แห่งที่พระเจ้าชัยวรมันที่ 7 ทรงสร้าง) ตัวปราสาทประกอบด้วยปรางค์ 3 องค์ เรียงเป็นแนวเหนือ-ใต้ บนฐานศิลาแลง อาคารหลักสร้างด้วยอิฐผสมศิลาแลง</p>
+                <div class="view-location-btn">
+                    <i class="fas fa-map-marker-alt"></i> ดูตำแหน่งบนแผนที่
+                </div>
+            </div>
+        </div>
+        <div class="place-card" onclick="window.location.href='/temple/ปราสาทเมืองจันทร์/'" style="cursor: pointer;">
+            <img src="{% static 'images/location/ปราสาทเมืองจันทร์PNG.png' %}" alt="ปราสาทเมืองจันทร์">
+            <div class="place-card-content">
+                <h3>ปราสาทเมืองจันทร์</h3>
+                <p>เป็นโบราณสถานที่ได้รับการประกาศขึ้นทะเบียน มีร่องรอยของชุมชนโบราณในบริเวณใกล้เคียง มีการขึ้นทะเบียนเมื่อปี พ.ศ. 2557</p>
+                <div class="view-location-btn">
+                    <i class="fas fa-map-marker-alt"></i> ดูตำแหน่งบนแผนที่
+                </div>
+            </div>
+        </div>
+        <div class="place-card" onclick="window.location.href='/temple/ปราสาทเยอ/'" style="cursor: pointer;">
+            <img src="{% static 'images/location/ปราสาทเยอPNG.png' %}" alt="ปราสาทเยอ">
+            <div class="place-card-content">
+                <h3>ปราสาทเยอ</h3>
+                <p>ได้รับการประกาศขึ้นทะเบียนเป็นโบราณสถานเมื่อปี พ.ศ. 2478 ตั้งอยู่ในเขตอำเภอขุขันธ์ จังหวัดศรีสะเกษ</p>
+                <div class="view-location-btn">
+                    <i class="fas fa-map-marker-alt"></i> ดูตำแหน่งบนแผนที่
+                </div>
+            </div>
+        </div>
+        <div class="place-card" onclick="window.location.href='/temple/ปราสาททามจาน/'" style="cursor: pointer;">
+            <img src="{% static 'images/location/ปราสาททามจานPNG.png' %}" alt="ปราสาททามจาน">
+            <div class="place-card-content">
+                <h3>ปราสาททามจาน</h3>
+                <p>ได้รับการประกาศขึ้นทะเบียนเป็นโบราณสถานเมื่อปี พ.ศ. 2478 ตั้งอยู่ในเขตอำเภอบึงบูรพ์ (หรืออาจมีชื่อเรียกอีกชื่อว่าปราสาทบ้านสมอ)</p>
+                <div class="view-location-btn">
+                    <i class="fas fa-map-marker-alt"></i> ดูตำแหน่งบนแผนที่
+                </div>
+            </div>
+        </div>
+        <div class="place-card" onclick="window.location.href='/temple/ปราสาทตาเล็ง/'" style="cursor: pointer;">
+            <img src="{% static 'images/location/ปราสาทตาเล็งPNG.png' %}" alt="ปราสาทตาเล็ง">
+            <div class="place-card-content">
+                <h3>ปราสาทตาเล็ง</h3>
+                <p>ได้รับการประกาศขึ้นทะเบียนเป็นโบราณสถานเมื่อปี พ.ศ. 2478 (อาจมีชื่อเรียกอีกชื่อว่าปราสาทตำหนักไทร)</p>
+                <div class="view-location-btn">
+                    <i class="fas fa-map-marker-alt"></i> ดูตำแหน่งบนแผนที่
+                </div>
+            </div>
+        </div>
+        <div class="place-card" onclick="window.location.href='/temple/พระธาตุเมืองจันทร์/'" style="cursor: pointer;">
+            <img src="{% static 'images/location/พระธาตุเมืองจันทร์PNG.png' %}" alt="พระธาตุเมืองจันทร์">
+            <div class="place-card-content">
+                <h3>พระธาตุเมืองจันทร์</h3>
+                <p>ข้อมูลไม่ชัดเจน คาดว่าเกี่ยวข้องกับศาสนาพุทธในยุคหลัง ตัวเมืองจันทร์เป็นชุมชนโบราณขนาดใหญ่</p>
+                <div class="view-location-btn">
+                    <i class="fas fa-map-marker-alt"></i> ดูตำแหน่งบนแผนที่
+                </div>
+            </div>
+        </div>
+        <div class="place-card" onclick="window.location.href='/temple/ปรางค์กู่สมบูรณ์/'" style="cursor: pointer;">
+            <img src="{% static 'images/location/ปรางค์กู่สมบูรณ์PNG.png' %}" alt="ปรางค์กู่สมบูรณ์">
+            <div class="place-card-content">
+                <h3>ปรางค์กู่สมบูรณ์</h3>
+                <p>เป็นโบราณสถานขนาดเล็ก ตั้งอยู่ที่บ้านหนองคู ได้รับการประกาศขึ้นทะเบียนในปี พ.ศ. 2552</p>
+                <div class="view-location-btn">
+                    <i class="fas fa-map-marker-alt"></i> ดูตำแหน่งบนแผนที่
+                </div>
+            </div>
+        </div>
+        <div class="place-card" onclick="window.location.href='/temple/โบราณสถานพระธาตุบรรจุอัฐิ/'" style="cursor: pointer;">
+            <img src="{% static 'images/location/โบราณสถานพระธาตุบรรจุอัฐิPNG.png' %}" alt="โบราณสถานพระธาตุบรรจุอัฐิ">
+            <div class="place-card-content">
+                <h3>โบราณสถานพระธาตุบรรจุอัฐิ</h3>
+                <p>ข้อมูลไม่ชัดเจน อาจเป็นเจดีย์หรือธาตุที่บรรจุอัฐิของบุคคลสำคัญ หรือเป็นพระธาตุเจดีย์ตามความเชื่อท้องถิ่น</p>
+                <div class="view-location-btn">
+                    <i class="fas fa-map-marker-alt"></i> ดูตำแหน่งบนแผนที่
+                </div>
+            </div>
+        </div>
+        <div class="place-card" onclick="window.location.href='/temple/ปราสาทตำหนักไทร/'" style="cursor: pointer;">
+            <img src="{% static 'images/location/ปราสาทตำหนักไทรPNG.png' %}" alt="ปราสาทตำหนักไทร">
+            <div class="place-card-content">
+                <h3>ปราสาทตำหนักไทร</h3>
+                <p>ดูเหมือนจะเป็นชื่อเดียวกับ ปราสาทตาเล็ง ที่ได้รับการประกาศขึ้นทะเบียนโบราณสถานปี พ.ศ. 2478</p>
+                <div class="view-location-btn">
+                    <i class="fas fa-map-marker-alt"></i> ดูตำแหน่งบนแผนที่
+                </div>
+            </div>
+        </div>
+       
+        <!-- คุณสามารถเพิ่มการ์ดสถานที่ท่องเที่ยวอื่นๆ ที่นี่ได้ -->
+    </div>
+</section>
+{% endblock %}
