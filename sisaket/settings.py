@@ -140,20 +140,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-# STATIC_URL = "/static/"
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static'),
-# ]
 STATIC_URL = "/static/"
+
+# Directory where Django looks for additional static files (for local development)
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+
+# Directory where collectstatic will gather all static files for production.
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
+# For production, use Whitenoise's storage to create unique names for files.
 if not DEBUG:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-# For production, use Whitenoise's storage to create unique names for files.
-# This avoids caching issues and is the recommended way for deployment.
-if not DEBUG:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
     
 
 # Default primary key field type
