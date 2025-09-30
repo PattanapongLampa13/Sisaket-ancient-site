@@ -1,20 +1,26 @@
 {
   "builds": [
     {
-      "src": "build.sh",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "staticfiles" }
-    },
-    {
       "src": "sisaket/wsgi.py",
-      "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+      "use": "@vercel/python"
     }
   ],
+  "build": {
+    "env": {
+      "DJANGO_SETTINGS_MODULE": "sisaket.settings"
+    },
+    "commands": [
+      "pip install -r requirements.txt",
+      "python manage.py collectstatic --no-input"
+    ]
+  },
   "rewrites": [
     {
       "source": "/(.*)",
       "destination": "sisaket/wsgi.py"
     }
-  ]
+  ],
+  "static": {
+    "staticfiles": "/static/"
+  }
 }
