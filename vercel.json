@@ -1,14 +1,27 @@
 {
-  "buildCommand": "uv pip install -r requirements.txt && python sisaket/manage.py collectstatic --no-input",
-  "outputDirectory": "staticfiles",
+  "builds": [
+    {
+      "src": "sisaket/wsgi.py",
+      "use": "@vercel/python",
+      "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/staticfiles/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "sisaket/wsgi.py"
+    }
+  ],
+   "buildCommand": "pip install -r requirements.txt && python manage.py collectstatic --no-input",
+   "outputDirectory": "staticfiles",
   "rewrites": [
     {
       "source": "/(.*)",
       "destination": "sisaket/wsgi.py"
     }
-  ],
-  "env": {
-    "DJANGO_SETTINGS_MODULE": "sisaket.settings",
-    "PYTHONUNBUFFERED": "1"
-  }
+  ]
 }
