@@ -140,18 +140,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = "/static/"
+# STATIC_URL = "/static/"
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'static'),
 # ]
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
-# This is the directory where collectstatic will gather all static files.
-# STATIC_ROOT = BASE_DIR / "staticfiles"
-# ปรับ STATIC_ROOT เพื่อให้ collectstatic สร้างโฟลเดอร์ 'static' ภายใน 'staticfiles'
-# ซึ่งจะทำให้ path ที่ Vercel ให้บริการตรงกับ STATIC_URL ("/static/")
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+if not DEBUG:
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 # For production, use Whitenoise's storage to create unique names for files.
 # This avoids caching issues and is the recommended way for deployment.
 if not DEBUG:
