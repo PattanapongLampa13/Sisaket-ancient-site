@@ -1,15 +1,15 @@
 {
-    "builds": [
-        {
-            "src": "sisaket/wsgi.py",
-            "use": "@vercel/python",
-            "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
-        }
-    ],
-    "rewrites": [
-        {
-            "src": "/(.*)",
-            "dest": "sisaket/wsgi.py"
-        }
-    ]
+  "builds": [
+    {
+      "src": "sisaket/wsgi.py",
+      "use": "@vercel/python",
+      "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "sisaket/wsgi.py"
+    }
+  ]
 }
