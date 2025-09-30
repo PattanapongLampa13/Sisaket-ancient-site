@@ -16,14 +16,8 @@ import os
 from dotenv import load_dotenv
 
 
-load_dotenv()
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-dotenv_path = os.path.join(BASE_DIR, '.env')
-if os.path.exists(dotenv_path):
-    load_dotenv(dotenv_path)
 
 
 # Quick-start development settings - unsuitable for production
@@ -33,7 +27,7 @@ if os.path.exists(dotenv_path):
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-qrkgoccx02wd8gd-i0d#p4ez00z#yu(vm+xsm#a@69cp!$@j3q')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False').lower() in ('true', '1', 't')
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -100,11 +94,10 @@ WSGI_APPLICATION = "sisaket.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+DATABASES =DATABASES = {
+    'default': dj_database_url.config(
+        default=os.getenv("DATABASE_URL")
+    )
 }
 
 # Custom Settings
@@ -161,4 +154,3 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Google Maps API Key
 GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY")
-print("GOOGLE_MAPS_API_KEY:", GOOGLE_MAPS_API_KEY)
