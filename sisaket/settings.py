@@ -152,7 +152,11 @@ STATICFILES_DIRS = [
 # ปรับ STATIC_ROOT เพื่อให้ collectstatic สร้างโฟลเดอร์ 'static' ภายใน 'staticfiles'
 # ซึ่งจะทำให้ path ที่ Vercel ให้บริการตรงกับ STATIC_URL ("/static/")
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
+# For production, use Whitenoise's storage to create unique names for files.
+# This avoids caching issues and is the recommended way for deployment.
+if not DEBUG:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
