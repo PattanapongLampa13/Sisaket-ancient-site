@@ -16,14 +16,8 @@ import os
 from dotenv import load_dotenv
 
 
-load_dotenv()
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-dotenv_path = os.path.join(BASE_DIR, '.env')
-if os.path.exists(dotenv_path):
-    load_dotenv(dotenv_path)
 
 
 # Quick-start development settings - unsuitable for production
@@ -33,7 +27,7 @@ if os.path.exists(dotenv_path):
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-qrkgoccx02wd8gd-i0d#p4ez00z#yu(vm+xsm#a@69cp!$@j3q')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG") == "1"
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -41,10 +35,6 @@ ALLOWED_HOSTS = [
     '.vercel.app',
     # เพิ่ม Custom Domain ของคุณถ้ามี
 ]
-
-
-if vercel_url := os.environ.get('VERCEL_URL'):
-    ALLOWED_HOSTS.append(vercel_url)
 
 CSRF_TRUSTED_ORIGINS = [
     'https://*.vercel.app',
@@ -67,6 +57,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -94,18 +85,21 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "sisaket.wsgi.application"
+WSGI_APPLICATION = "sisaket.wsgi.app"
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {'default': dj_database_url.config(default=os.environ.get('POSTGRES_URL'))}
 
 # Custom Settings
 CUSTOM_SESSION_DURATION_SECONDS = 3000 # 5 hours in milliseconds
@@ -161,4 +155,3 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Google Maps API Key
 GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY")
-print("GOOGLE_MAPS_API_KEY:", GOOGLE_MAPS_API_KEY)
