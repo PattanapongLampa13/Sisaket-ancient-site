@@ -16,5 +16,5 @@
       "dest": "sisaket/wsgi.py"
     }
   ],
-  "buildCommand": "./build_files.sh"
+  "buildCommand": "bash build_files.sh"
 }
