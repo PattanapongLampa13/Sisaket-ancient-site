@@ -36,10 +36,6 @@ ALLOWED_HOSTS = [
     # เพิ่ม Custom Domain ของคุณถ้ามี
 ]
 
-
-if vercel_url := os.environ.get('VERCEL_URL'):
-    ALLOWED_HOSTS.append(vercel_url)
-
 CSRF_TRUSTED_ORIGINS = [
     'https://*.vercel.app',
     # เพิ่ม Custom Domain ของคุณถ้ามี เช่น 'https://yourdomain.com'
@@ -89,13 +85,13 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "sisaket.wsgi.application"
+WSGI_APPLICATION = "sisaket.wsgi.app"
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES =DATABASES = {
+DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv("DATABASE_URL")
     )
