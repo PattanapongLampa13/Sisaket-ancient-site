@@ -150,7 +150,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # For production, use Whitenoise's storage to create unique names for files.
 if not DEBUG:
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
     
 
 # Default primary key field type
