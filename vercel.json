@@ -16,5 +16,12 @@
       "dest": "sisaket/wsgi.py"
     }
   ],
-  "buildCommand": "bash build_files.sh"
+   "buildCommand": "pip install -r requirements.txt && python manage.py collectstatic --no-input",
+   "outputDirectory": "staticfiles",
+   "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "sisaket/wsgi.py"
+    }
+  ]
 }
