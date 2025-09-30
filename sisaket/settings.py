@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-qrkgoccx02wd8gd-i0d#p4ez00z#yu(vm+xsm#a@69cp!$@j3q')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False').lower() in ('true', '1', 't')
+DEBUG = os.environ.get("DEBUG") == "1"
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -91,11 +91,15 @@ WSGI_APPLICATION = "sisaket.wsgi.app"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv("DATABASE_URL")
-    )
-}
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {'default': dj_database_url.config(default=os.environ.get('POSTGRES_URL'))}
 
 # Custom Settings
 CUSTOM_SESSION_DURATION_SECONDS = 3000 # 5 hours in milliseconds
