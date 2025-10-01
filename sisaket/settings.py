@@ -38,6 +38,10 @@ ALLOWED_HOSTS = [
     # เพิ่ม Custom Domain ของคุณถ้ามี
 ]
 
+# Security settings for production
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = not DEBUG
+
 CSRF_TRUSTED_ORIGINS = [
     'https://*.vercel.app',
     # เพิ่ม Custom Domain ของคุณถ้ามี เช่น 'https://yourdomain.com'
@@ -104,7 +108,7 @@ else:
     DATABASES = {'default': dj_database_url.config(default=os.environ.get('POSTGRES_URL'))}
 
 # Custom Settings
-CUSTOM_SESSION_DURATION_SECONDS = 3000 # 5 hours in milliseconds
+CUSTOM_SESSION_DURATION_SECONDS = 10 # 10 seconds in milliseconds
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -149,7 +153,16 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # For production, use Whitenoise's storage to create unique names for files.
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+if not DEBUG:
+    # Use regular StaticFilesStorage for better Vercel compatibility
+    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+else:
+    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+
+# Whitenoise settings
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_AUTOREFRESH = True
+WHITENOISE_SKIP_COMPRESS_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'zip', 'gz', 'tgz', 'bz2', 'tbz', 'xz', 'br']
     
 
 # Default primary key field type
@@ -160,3 +173,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Google Maps API Key
 GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY")
+
+# Login/Logout Redirect URLs
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+LOGIN_URL = '/login/'
