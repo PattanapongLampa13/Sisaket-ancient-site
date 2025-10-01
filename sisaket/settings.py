@@ -108,7 +108,7 @@ else:
     DATABASES = {'default': dj_database_url.config(default=os.environ.get('POSTGRES_URL'))}
 
 # Custom Settings
-CUSTOM_SESSION_DURATION_SECONDS = 3000 # 5 hours in milliseconds
+CUSTOM_SESSION_DURATION_SECONDS = 10 # 10 seconds in milliseconds
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -173,3 +173,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Google Maps API Key
 GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY")
+
+# Login/Logout Redirect URLs
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+LOGIN_URL = '/login/'

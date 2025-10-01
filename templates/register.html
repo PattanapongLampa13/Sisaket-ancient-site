@@ -1,0 +1,62 @@
+{% extends 'base_simple.html' %}
+
+{% block title %}สมัครสมาชิก{% endblock %}
+
+{% block extra_head %}
+<style>
+    .form-input {
+        width: 100%;
+        padding: 0.8rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-family: 'Kanit', sans-serif;
+    }
+    .error-container {
+        color: #D8000C;
+        background-color: #FFD2D2;
+        border: 1px solid #D8000C;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+    }
+    .error-container ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 5rem auto; padding: 2rem; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <h2 style="text-align: center; margin-bottom: 1.5rem;">สร้างบัญชีใหม่</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+
+        {% if form.errors %}
+            <div class="error-container">
+                <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ error|escape }}</li>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <li>{{ error|escape }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <input type="text" name="username" class="form-input" placeholder="ชื่อผู้ใช้" required>
+        <input type="password" name="password1" class="form-input" placeholder="รหัสผ่าน" required>
+        <input type="password" name="password2" class="form-input" placeholder="ยืนยันรหัสผ่าน" required>
+
+        <button type="submit" style="width: 100%; padding: 0.8rem; border: none; border-radius: 4px; background: #2E8B57; color: #fff; font-size: 1.1rem; cursor: pointer; margin-top: 1rem;">สมัครสมาชิก</button>
+    </form>
+    <p style="text-align: center; margin-top: 1.5rem;">มีบัญชีอยู่แล้ว? <a href="{% url 'login' %}" style="color: #2E8B57;">เข้าสู่ระบบที่นี่</a></p>
+</div>
+{% endblock %}
