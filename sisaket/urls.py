@@ -30,7 +30,7 @@ urlpatterns = [
     path("temple/<str:temple_name>/", views.temple_detail_map, name="temple_detail_map"),
     path("register/", views.register, name="register"),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('logout/', views.logout_view, name='logout'),
 ]
 
 # Serve static files during development
