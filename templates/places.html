@@ -115,12 +115,12 @@
 <section class="places-list">
     <div class="places-grid">
         {% for site in sites %}
-        <a href="{% url 'temple_detail_map' site.ชื่อสถานที่ %}" class="place-card-link">
+        <a href="{% url 'temple_detail_map' site.name %}" class="place-card-link">
             <div class="place-card">
-                <img src="{% static 'images/location/'|add:site.image %}" alt="{{ site.ชื่อสถานที่ }}">
+                <img src="{% static 'images/location/'|add:site.image %}" alt="{{ site.name }}">
                 <div class="place-card-content">
-                    <h3>{{ site.ชื่อสถานที่ }}</h3>
-                    <p><strong>ที่อยู่:</strong> {{ site.ที่อยู่ }}</p>
+                    <h3>{{ site.name }}</h3>
+                    <p><strong>ที่อยู่:</strong> {{ site.address }}</p>
                     <div class="view-location-btn">
                         <i class="fas fa-map-marker-alt"></i> ดูตำแหน่งบนแผนที่
                     </div>

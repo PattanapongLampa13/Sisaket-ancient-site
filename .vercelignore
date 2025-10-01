@@ -23,3 +23,4 @@ db.sqlite3
 !manage.py
 !build_files.sh
 !vercel.json
+!data.json
