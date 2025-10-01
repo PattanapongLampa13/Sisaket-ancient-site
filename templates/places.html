@@ -111,7 +111,9 @@
         {% for site in sites %}
         <a href="{% url 'temple_detail_map' site.ชื่อสถานที่ %}" class="place-card-link">
             <div class="place-card">
-                <img src="{% static 'images/location/'|add:site.image %}" alt="{{ site.ชื่อสถานที่ }}">
+                {% with image_path='images/location/'|add:site.image %}
+                    <img src="{% static image_path %}" alt="{{ site.ชื่อสถานที่ }}">
+                {% endwith %}
                 <div class="place-card-content">
                     <h3>{{ site.ชื่อสถานที่ }}</h3>
                     <p><strong>ที่อยู่:</strong> {{ site.ที่อยู่ }}</p>
