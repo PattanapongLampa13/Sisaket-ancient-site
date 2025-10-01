@@ -38,6 +38,10 @@ ALLOWED_HOSTS = [
     # เพิ่ม Custom Domain ของคุณถ้ามี
 ]
 
+# Security settings for production
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = not DEBUG
+
 CSRF_TRUSTED_ORIGINS = [
     'https://*.vercel.app',
     # เพิ่ม Custom Domain ของคุณถ้ามี เช่น 'https://yourdomain.com'
@@ -149,7 +153,16 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # For production, use Whitenoise's storage to create unique names for files.
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+if not DEBUG:
+    # Use regular StaticFilesStorage for better Vercel compatibility
+    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+else:
+    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+
+# Whitenoise settings
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_AUTOREFRESH = True
+WHITENOISE_SKIP_COMPRESS_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'zip', 'gz', 'tgz', 'bz2', 'tbz', 'xz', 'br']
     
 
 # Default primary key field type
