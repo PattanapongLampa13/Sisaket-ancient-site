@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="th">
 <head>
     <meta charset="UTF-8">
@@ -208,7 +209,7 @@
         <div class="temple-info">
             <div class="temple-details">
                 {% if temple.image %}
-                <img src="{{ temple.image }}" alt="{{ temple.name }}" class="temple-image" onerror="this.style.display='none'">
+                <img src="{% static temple.image %}" alt="{{ temple.name }}" class="temple-image" onerror="this.style.display='none'">
                 {% endif %}
                 
                 <div class="detail-item">

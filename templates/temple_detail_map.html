@@ -261,7 +261,7 @@
 <div class="temple-info">
     <div class="temple-details">
         {% if temple.image %}
-        <img src="{% static '' %}{{ temple.image|slice:'7:' }}" 
+        <img src="{% static temple.image %}" 
              alt="{{ temple.name }}" 
              class="temple-image"
              onerror="this.style.display='none'">
@@ -376,7 +376,7 @@ function initTempleMap() {
                     {{ temple.name }}
                 </h3>
                 {% if temple.image %}
-                <img src="{% static '' %}{{ temple.image|slice:'7:' }}" 
+                <img src="{% static temple.image %}" 
                      alt="{{ temple.name }}" 
                      style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px; margin-bottom: 8px;"
                      onerror="this.style.display='none'">

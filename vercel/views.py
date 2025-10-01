@@ -56,7 +56,7 @@ def temple_detail_map(request, temple_name):
         'address': temple_data['ที่อยู่'],
         'lat': temple_data['LAT'],
         'lng': temple_data['LONG'],
-        'image': temple_data['image'],
+        'image': f"images/location/{temple_data['image']}",  # Fixed path
         'organization': temple_data.get('อปท.', temple_data.get('ตำบล', '')),
     }
     
