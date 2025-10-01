@@ -200,9 +200,13 @@
         setTimeout(() => { introImage.style.opacity = 1; }, 500);
         setTimeout(() => { introMap.style.opacity = 1; }, 1000);
         setTimeout(() => { introText.style.opacity = 1; }, 1500);
-        setTimeout(() => { introContainer.style.opacity = 0; }, 3500);
+        setTimeout(() => { 
+            introContainer.style.opacity = 0; 
+            introMap.style.opacity = 0;
+        }, 3500);
         setTimeout(() => {
             introContainer.style.display = 'none';
+            introMap.style.display = 'none';
 
             // Move the content to the header placeholder
             const logoPlaceholder = document.getElementById('logo-placeholder');
