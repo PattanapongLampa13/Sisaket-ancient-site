@@ -28,6 +28,13 @@
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.5s ease, visibility 0.5s ease;
+            pointer-events: none;
+        }
+
+        .login-modal.show {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: all;
         }
 
         .login-form-container {
@@ -90,7 +97,7 @@
             text-decoration: underline;
         }
 
-        #register-view {
+            #register-view {
             display: none;
         }
 
@@ -104,12 +111,30 @@
             display: none; /* Hidden by default */
         }
 
-    </style>
+        .skip-login {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #333;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            z-index: 3001;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .skip-login:hover {
+            opacity: 1;
+        }    </style>
     {% block extra_head %}{% endblock %}
 </head>
 <body>
 
     <div id="login-modal" class="login-modal">
+        <button class="skip-login" onclick="proceedToApp()" title="Skip login for debugging">Skip</button>
         <div class="login-form-container">
             
             <!-- Login View -->
@@ -183,6 +208,20 @@
     </div>
 
     <script>
+    function proceedToApp() {
+        const loginModal = document.getElementById('login-modal');
+        const session = {
+            isLoggedIn: true,
+            timestamp: new Date().getTime()
+        };
+        localStorage.setItem('userSession', JSON.stringify(session));
+        
+        loginModal.classList.remove('show');
+        setTimeout(() => {
+            startIntroAnimation();
+        }, 500);
+    }
+
     function startIntroAnimation() {
         const introContainer = document.getElementById('intro-container');
         const introTopLeft = document.getElementById('intro-top-left');
@@ -222,6 +261,21 @@
     document.addEventListener('DOMContentLoaded', function() {
         const SESSION_DURATION_MS = {{ CUSTOM_SESSION_DURATION_MS|default:3600000 }};
 
+        // Add fallback for no-JS users after 10 seconds
+        setTimeout(() => {
+            const mainContent = document.getElementById('main-content');
+            if (mainContent.classList.contains('hidden')) {
+                console.log('Fallback: Showing content after timeout');
+                mainContent.classList.remove('hidden');
+                mainContent.classList.add('fade-in');
+                document.body.classList.remove('no-scroll');
+                
+                // Hide login modal
+                const loginModal = document.getElementById('login-modal');
+                loginModal.classList.remove('show');
+            }
+        }, 10000);
+
         // --- Session Check ---
         const sessionData = localStorage.getItem('userSession');
         if (sessionData) {
@@ -252,8 +306,7 @@
 
         // Show login modal
         setTimeout(() => {
-            loginModal.style.visibility = 'visible';
-            loginModal.style.opacity = '1';
+            loginModal.classList.add('show');
         }, 500);
 
         // --- View Toggling ---
@@ -266,20 +319,6 @@
             registerView.style.display = 'none';
             loginView.style.display = 'block';
         });
-
-        function proceedToApp() {
-            const session = {
-                isLoggedIn: true,
-                timestamp: new Date().getTime()
-            };
-            localStorage.setItem('userSession', JSON.stringify(session));
-            
-            loginModal.style.opacity = '0';
-            setTimeout(() => {
-                loginModal.style.display = 'none';
-                startIntroAnimation();
-            }, 500);
-        }
 
         // --- Login Logic ---
         loginForm.addEventListener('submit', function(e) {

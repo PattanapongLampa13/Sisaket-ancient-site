@@ -29,3 +29,8 @@ urlpatterns = [
     path("temple/<str:temple_name>/", views.temple_detail_map, name="temple_detail_map"),
     path("register/", views.register, name="register"),
 ]
+
+# Serve static files during development
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
