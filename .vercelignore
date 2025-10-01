@@ -1,0 +1,25 @@
+# Don't ignore static files and staticfiles directories
+!static/
+!staticfiles/
+!templates/
+
+# Ignore development files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.env
+.git/
+.gitignore
+*.log
+db.sqlite3
+
+# Don't ignore these important files
+!requirements.txt
+!manage.py
+!build_files.sh
+!vercel.json
