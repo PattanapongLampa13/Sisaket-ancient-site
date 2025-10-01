@@ -5,6 +5,7 @@ from django.http import JsonResponse, Http404
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 
 # Create your views here.
 
@@ -13,27 +14,63 @@ def home(request):
     return render(request, 'home.html', {'api_key': api_key})
 
 def about(request):
-    return render(request, 'about.html')
+    try:
+        return render(request, 'about.html')
+    except Exception as e:
+        # Log the error for debugging
+        print(f"Error in about view: {str(e)}")
+        return JsonResponse({'error': f'Template error: {str(e)}'}, status=500)
 
 def map_view(request):
     api_key = os.environ.get('GOOGLE_MAPS_API_KEY')
     return render(request, 'map.html', {'api_key': api_key})
 
 def places(request):
-    api_key = os.environ.get('GOOGLE_MAPS_API_KEY')
-    with open('data.json', 'r', encoding='utf-8') as file:
-        data = json.load(file)
-    context = {
-        'sites': data['ancient_sites_sisaket'],
-        'api_key': api_key
-    }
-    return render(request, 'places.html', context)
+    try:
+        api_key = os.environ.get('GOOGLE_MAPS_API_KEY')
+        
+        # Use absolute path to data.json
+        data_file_path = os.path.join(settings.BASE_DIR, 'data.json')
+        
+        try:
+            with open(data_file_path, 'r', encoding='utf-8') as file:
+                data = json.load(file)
+        except FileNotFoundError:
+            # Fallback: try current working directory
+            try:
+                with open('data.json', 'r', encoding='utf-8') as file:
+                    data = json.load(file)
+            except FileNotFoundError:
+                # If still not found, return empty data
+                data = {'ancient_sites_sisaket': []}
+        
+        context = {
+            'sites': data['ancient_sites_sisaket'],
+            'api_key': api_key
+        }
+        return render(request, 'places.html', context)
+    except Exception as e:
+        # Log the error for debugging  
+        print(f"Error in places view: {str(e)}")
+        import traceback
+        print(traceback.format_exc())
+        return JsonResponse({'error': f'View error: {str(e)}'}, status=500)
 
 def temple_detail_map(request, temple_name):
     """Display individual temple location on map"""
-    # Load temple data from JSON file
-    with open('data.json', 'r', encoding='utf-8') as file:
-        data = json.load(file)
+    # Use absolute path to data.json
+    data_file_path = os.path.join(settings.BASE_DIR, 'data.json')
+    
+    try:
+        with open(data_file_path, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        # Fallback: try current working directory
+        try:
+            with open('data.json', 'r', encoding='utf-8') as file:
+                data = json.load(file)
+        except FileNotFoundError:
+            raise Http404("Data file not found")
     
     # Find the temple by name
     temple_data = None
