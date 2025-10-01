@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}สถานที่ท่องเที่ยว{% endblock %}
+
+{% block extra_head %}
+<style>
+    .page-header {
+        text-align: center;
+        padding: 3rem 2rem;
+        background-color: #f7f7f7;
+        border-radius: 8px;
+        margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .page-header p {
+        font-size: 1.25rem;
+        color: #555;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .places-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .place-card-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
+    .place-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* Make cards of equal height */
+    }
+
+    .place-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    }
+
+    .view-location-btn {
+        margin-top: auto; /* Pushes button to the bottom */
+        padding: 0.75rem 1rem;
+        background: linear-gradient(135deg, #a04000, #ff8c00);
+        color: white;
+        border-radius: 25px;
+        text-align: center;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(160, 64, 0, 0.3);
+        align-self: center; /* Center button horizontally */
+        width: calc(100% - 3rem); /* Match padding */
+    }
+
+    .place-card:hover .view-location-btn {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(160, 64, 0, 0.4);
+    }
+
+    .place-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .place-card-content {
+        padding: 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .place-card-content h3 {
+        margin-top: 0;
+        color: var(--primary-color);
+    }
+    .place-card-content p {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        flex-grow: 1;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>ปราสาทศรีสะเกษ</h1>
+    <p>ค้นหาปราสาทศรีสะเกษ</p>
+    <img src="{% static 'images/prasat.jpg' %}" alt="TEST IMAGE">
+</section>
+
+<section class="places-list">
+    <div class="places-grid">
+        {% for site in sites %}
+        <a href="{% url 'temple_detail_map' site.ชื่อสถานที่ %}" class="place-card-link">
+            <div class="place-card">
+                <img src="{% static 'images/location/'|add:site.image %}" alt="{{ site.ชื่อสถานที่ }}">
+                <div class="place-card-content">
+                    <h3>{{ site.ชื่อสถานที่ }}</h3>
+                    <p><strong>ที่อยู่:</strong> {{ site.ที่อยู่ }}</p>
+                    <div class="view-location-btn">
+                        <i class="fas fa-map-marker-alt"></i> ดูตำแหน่งบนแผนที่
+                    </div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
