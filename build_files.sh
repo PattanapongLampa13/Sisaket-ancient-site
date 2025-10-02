@@ -1,6 +1,8 @@
 #!/bin/bash
 set -o errexit
 
+echo "Cache bust: $(date)"
+
 echo "Starting build process..."
 
 echo "Installing requirements..."
