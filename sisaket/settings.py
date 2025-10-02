@@ -110,7 +110,7 @@ DATABASES = {
 
 
 # Custom Settings
-CUSTOM_SESSION_DURATION_SECONDS = 10 # 10 seconds in milliseconds
+CUSTOM_SESSION_DURATION_SECONDS = 3000 # 10 seconds in milliseconds
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
