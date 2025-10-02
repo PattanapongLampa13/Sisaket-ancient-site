@@ -97,15 +97,17 @@ WSGI_APPLICATION = "sisaket.wsgi.app"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres.qehwijssnvlhaoeyyiwf',
+        'PASSWORD': os.environ.get('SUPABASE_DB_PASSWORD', 'Puplnwza2549'),
+        'HOST': 'aws-1-ap-southeast-1.pooler.supabase.com',
+        'PORT': '5432',
     }
-else:
-    DATABASES = {'default': dj_database_url.config(default=os.environ.get('POSTGRES_URL'))}
+}
+
 
 # Custom Settings
 CUSTOM_SESSION_DURATION_SECONDS = 10 # 10 seconds in milliseconds
