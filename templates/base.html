@@ -14,186 +14,59 @@
 
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <style>
-        .login-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 3000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-            pointer-events: none;
-        }
-
-        .login-modal.show {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: all;
-        }
-
-        .login-form-container {
-            background: #fff;
-            padding: 3rem;
-            border-radius: 8px;
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            font-family: 'Kanit', sans-serif;
-        }
-
-        .login-form-container h2 {
-            margin-bottom: 1.5rem;
-            color: #2E8B57;
-        }
-
-        .login-form-container input {
-            width: 100%;
-            padding: 0.8rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-family: 'Kanit', sans-serif;
-        }
-
-        .login-form-container button {
-            width: 100%;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 4px;
-            background: #FFD700;
-            color: #333;
-            font-size: 1.1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            font-family: 'Kanit', sans-serif;
-        }
-
-        .login-form-container button:hover {
-            background-color: #e6b800;
-        }
-        
-        .login-form-container .submit-register {
-            background-color: #2E8B57;
-            color: #fff;
-        }
-
-        .login-form-container .submit-register:hover {
-            background-color: #256d44;
-        }
-
-        .toggle-link {
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            color: #555;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-
-            #register-view {
+        /* Minimal styles to ensure layout works without the modal CSS */
+        .hidden {
             display: none;
         }
-
-        .error-message {
-            color: #D8000C;
-            background-color: #FFD2D2;
-            border: 1px solid #D8000C;
-            padding: 10px;
-            border-radius: 4px;
-            margin-bottom: 1rem;
-            display: none; /* Hidden by default */
+        .fade-in {
+            animation: fadeIn 1s ease-in-out forwards;
         }
-
-        .skip-login {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #333;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            z-index: 3001;
-            font-size: 12px;
-            opacity: 0.7;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
-
-        .skip-login:hover {
-            opacity: 1;
-        }    </style>
+        body.no-scroll {
+            overflow: hidden;
+        }
+    </style>
     {% block extra_head %}{% endblock %}
 </head>
 <body>
 
-    <div id="login-modal" class="login-modal">
-        <button class="skip-login" onclick="proceedToApp()" title="Skip login for debugging">Skip</button>
-        <div class="login-form-container">
-            
-            <!-- Login View -->
-            <div id="login-view">
-                <h2>เข้าสู่ระบบ</h2>
-                <div id="login-error" class="error-message"></div>
-                <form id="login-form">
-                    <input type="text" id="login-username" placeholder="ชื่อผู้ใช้" required>
-                    <input type="password" id="login-password" placeholder="รหัสผ่าน" required>
-                    <button type="submit">เข้าสู่ระบบ</button>
-                </form>
-                <p class="toggle-link" id="show-register">ยังไม่มีบัญชี? สร้างบัญชี</p>
-            </div>
-
-            <!-- Register View -->
-            <div id="register-view">
-                <h2>สร้างบัญชีใหม่</h2>
-                <div id="register-error" class="error-message"></div>
-                <form id="register-form">
-                    {% csrf_token %}
-                    <input type="text" id="register-username" placeholder="ชื่อผู้ใช้" required>
-                    <input type="password" id="register-password" placeholder="รหัสผ่าน" required>
-                    <input type="password" id="register-confirm-password" placeholder="ยืนยันรหัสผ่าน" required>
-                    <button type="submit" class="submit-register">สมัครสมาชิก</button>
-                </form>
-                <p class="toggle-link" id="show-login">มีบัญชีอยู่แล้ว? เข้าสู่ระบบ</p>
-            </div>
-
-        </div>
-    </div>
-
-    <div id="intro-map">
+    <div id="intro-map" style="display: none; opacity: 0; transition: opacity 1s ease;">
         <img src="{% static 'images/sskmap.png' %}" alt="SSKMap" style="width: 100%; height: 100%; object-fit: cover;">
     </div>
 
     <!-- Intro Animation -->
-    <div id="intro-container">
+    <div id="intro-container" style="display: none; opacity: 1; transition: opacity 1s ease;">
         <div id="intro-center">
-            <img id="intro-image" src="{% static 'images/SSK.png' %}" alt="Prasat">
-            <h1 id="intro-text">โบราณสถานจังหวัดศรีสะเกษ</h1>
+            <img id="intro-image" src="{% static 'images/SSK.png' %}" alt="Prasat" style="opacity: 0; transition: opacity 1s ease;">
+            <h1 id="intro-text" style="opacity: 0; transition: opacity 1s ease;">โบราณสถานจังหวัดศรีสะเกษ</h1>
         </div>
     </div>
-    <div id="intro-top-left">
+    <div id="intro-top-left" style="display: none;">
         <img id="intro-image-corner" src="{% static 'images/prasat.jpg' %}" alt="Prasat">
         <span id="intro-text-corner">โบราณสถานจังหวัดศรีสะเกษ</span>
     </div>
 
 
     <!-- Main Content (will be shown after loader) -->
-    <div id="main-content" class="hidden">
+    <div id="main-content" class="{% if request.path != '/' %}fade-in{% else %}hidden{% endif %}">
         <header class="header">
             <div class="logo" id="logo-placeholder">
-                 <!-- This will be hidden initially -->
+                 <img id="intro-image-corner" src="{% static 'images/prasat.jpg' %}" alt="Prasat"><span id="intro-text-corner">โบราณสถานจังหวัดศรีสะเกษ</span>
             </div>
             <nav class="nav-links">
                 <a href="/">หน้าแรก</a>
                 <a href="/places">สถานที่</a>
-                {% comment %} <a href="/map">แผนที่</a> {% endcomment %}
                 <a href="/about">เกี่ยวกับ</a>
+                {% if user.is_authenticated %}
+                    <span style="color: #fff; margin-left: 1rem; padding: 0.5rem;">ยินดีต้อนรับ, {{ user.username }}</span>
+                    <a href="{% url 'logout' %}" style="margin-left: 1rem;">ออกจากระบบ</a>
+                {% else %}
+                    <a href="{% url 'login' %}" style="margin-left: 1rem;">เข้าสู่ระบบ</a>
+                    <a href="{% url 'register' %}" style="margin-left: 1rem;">สมัครสมาชิก</a>
+                {% endif %}
             </nav>
         </header>
 
@@ -208,20 +81,6 @@
     </div>
 
     <script>
-    function proceedToApp() {
-        const loginModal = document.getElementById('login-modal');
-        const session = {
-            isLoggedIn: true,
-            timestamp: new Date().getTime()
-        };
-        localStorage.setItem('userSession', JSON.stringify(session));
-        
-        loginModal.classList.remove('show');
-        setTimeout(() => {
-            startIntroAnimation();
-        }, 500);
-    }
-
     function startIntroAnimation() {
         const introContainer = document.getElementById('intro-container');
         const introTopLeft = document.getElementById('intro-top-left');
@@ -247,10 +106,9 @@
             introContainer.style.display = 'none';
             introMap.style.display = 'none';
 
-            // Move the content to the header placeholder
             const logoPlaceholder = document.getElementById('logo-placeholder');
             logoPlaceholder.innerHTML = introTopLeft.innerHTML;
-            introTopLeft.style.display = 'none'; // Hide the original
+            introTopLeft.style.display = 'none';
 
             mainContent.classList.remove('hidden');
             mainContent.classList.add('fade-in');
@@ -259,120 +117,23 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        const SESSION_DURATION_MS = {{ CUSTOM_SESSION_DURATION_MS|default:3600000 }};
-
-        // Add fallback for no-JS users after 10 seconds
-        setTimeout(() => {
+        // Only run the intro animation on the homepage.
+        if (window.location.pathname === '/') {
+            startIntroAnimation();
+        } else {
+            // For other pages, just show the content immediately.
             const mainContent = document.getElementById('main-content');
-            if (mainContent.classList.contains('hidden')) {
-                console.log('Fallback: Showing content after timeout');
-                mainContent.classList.remove('hidden');
-                mainContent.classList.add('fade-in');
-                document.body.classList.remove('no-scroll');
-                
-                // Hide login modal
-                const loginModal = document.getElementById('login-modal');
-                loginModal.classList.remove('show');
-            }
-        }, 10000);
-
-        // --- Session Check ---
-        const sessionData = localStorage.getItem('userSession');
-        if (sessionData) {
-            const session = JSON.parse(sessionData);
-            const now = new Date().getTime();
-            if (now - session.timestamp < SESSION_DURATION_MS) {
-                startIntroAnimation();
-                return; // Skip login modal
-            } else {
-                localStorage.removeItem('userSession'); // Clear expired session
-            }
+            const body = document.body;
+            const logoPlaceholder = document.getElementById('logo-placeholder');
+            const introTopLeft = document.getElementById('intro-top-left');
+            
+            logoPlaceholder.innerHTML = introTopLeft.innerHTML;
+            introTopLeft.style.display = 'none';
+            mainContent.classList.remove('hidden');
+            mainContent.classList.add('fade-in');
+            body.classList.remove('no-scroll');
         }
-
-        const loginModal = document.getElementById('login-modal');
-        const loginView = document.getElementById('login-view');
-        const registerView = document.getElementById('register-view');
-        const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
-        const showRegisterLink = document.getElementById('show-register');
-        const showLoginLink = document.getElementById('show-login');
-        const loginError = document.getElementById('login-error');
-        const registerError = document.getElementById('register-error');
-
-        // Hide intro elements initially
-        document.getElementById('intro-container').style.display = 'none';
-        document.getElementById('intro-map').style.display = 'none';
-        document.getElementById('intro-top-left').style.display = 'none';
-
-        // Show login modal
-        setTimeout(() => {
-            loginModal.classList.add('show');
-        }, 500);
-
-        // --- View Toggling ---
-        showRegisterLink.addEventListener('click', () => {
-            loginView.style.display = 'none';
-            registerView.style.display = 'block';
-        });
-
-        showLoginLink.addEventListener('click', () => {
-            registerView.style.display = 'none';
-            loginView.style.display = 'block';
-        });
-
-        // --- Login Logic ---
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            // In a real app, you'd fetch /login to verify credentials.
-            // For now, we assume any login attempt is successful.
-            proceedToApp();
-        });
-
-        // --- Registration Logic ---
-        registerForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const username = document.getElementById('register-username').value;
-            const password = document.getElementById('register-password').value;
-            const confirmPassword = document.getElementById('register-confirm-password').value;
-
-            if (password !== confirmPassword) {
-                registerError.textContent = 'รหัสผ่านไม่ตรงกัน';
-                registerError.style.display = 'block';
-                return;
-            }
-
-            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-            fetch('/register/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken
-                },
-                body: JSON.stringify({ username: username, password: password })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    proceedToApp();
-                } else {
-                    registerError.textContent = data.message || 'เกิดข้อผิดพลาดในการสมัคร';
-                    registerError.style.display = 'block';
-                }
-            })
-            .catch(error => {
-                console.error('Registration error:', error);
-                registerError.textContent = 'เกิดข้อผิดพลาดร้ายแรง';
-                registerError.style.display = 'block';
-            });
-        });
     });
-    </script>
-    <!-- Debug: API Key = {{ api_key }} -->
-    <script>
-        // Debug: Check if API key is available
-        console.log('API Key from template:', '{{ api_key }}');
-        console.log('API Key length:', '{{ api_key }}'.length);
     </script>
 
 </body>
