@@ -173,3 +173,243 @@ body.no-scroll {
     padding: 1.5rem;
     margin-top: 2rem;
 }
+
+/* --- Homepage Specific Styles --- */
+:root {
+    --primary-color-home: #a04000;
+    --secondary-color-home: #ff8c00;
+    --shadow-home: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1626088304942-4acaa76a58a3?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover;
+    color: white;
+    text-align: center;
+    padding: 4rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 3rem;
+}
+
+.hero h1 {
+    font-size: 2.8rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+}
+
+.hero p {
+    font-size: 1.3rem;
+    font-weight: 300;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
+    color: var(--primary-color-home);
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: var(--secondary-color-home);
+    margin: 0.5rem auto 0;
+}
+
+.intro-text {
+    text-align: center;
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto 3rem auto;
+    padding: 0 1rem;
+}
+
+.featured-places {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.place-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: var(--shadow-home);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+}
+
+.place-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.place-card .place-card-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 220px;
+}
+
+.place-card .place-card-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.place-card-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.place-card-content h3 {
+    margin-top: 0;
+    color: var(--primary-color-home);
+    font-size: 1.5em;
+    margin-bottom: 0.5rem;
+}
+
+.place-card-content p {
+    font-size: 1em;
+    color: #555;
+    line-height: 1.6;
+    flex-grow: 1;
+}
+
+.view-location-btn {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(135deg, var(--primary-color-home), var(--secondary-color-home));
+    color: white;
+    border-radius: 25px;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(160, 64, 0, 0.3);
+    user-select: none;
+    pointer-events: none;
+}
+
+/* --- Responsive Design --- */
+
+/* For Tablets */
+@media (min-width: 768px) {
+    .hero {
+        padding: 6rem 2rem;
+    }
+
+    .hero h1 {
+        font-size: 3.5rem;
+    }
+
+    .hero p {
+        font-size: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+    }
+
+    .featured-places {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .place-card {
+        flex-direction: row;
+        height: 350px;
+    }
+    
+    .place-card:nth-of-type(odd) {
+        flex-direction: row-reverse;
+    }
+
+    .place-card .place-card-image-wrapper {
+        width: 50%;
+        height: 100%;
+    }
+    
+    .place-card .place-card-image-wrapper::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to left, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.0) 50%);
+        z-index: 1;
+    }
+
+    .place-card:nth-of-type(odd) .place-card-image-wrapper::before {
+        background: linear-gradient(to right, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.0) 50%);
+    }
+
+    .place-card-content {
+        width: 50%;
+        padding: 1.5rem 2rem;
+    }
+}
+
+/* For Desktops */
+@media (min-width: 1024px) {
+    .featured-places {
+        grid-template-columns: 1fr; /* Back to 1 column for the large horizontal cards */
+    }
+     .place-card {
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* Header Responsive */
+.menu-toggle {
+    display: none;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background-color: var(--header-bg);
+        box-shadow: var(--shadow);
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links a {
+        margin: 1rem;
+        text-align: center;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .header {
+        justify-content: space-between;
+    }
+}

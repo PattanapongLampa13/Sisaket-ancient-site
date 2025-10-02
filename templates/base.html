@@ -56,7 +56,10 @@
             <div class="logo" id="logo-placeholder">
                  <img id="intro-image-corner" src="{% static 'images/prasat.jpg' %}" alt="Prasat"><span id="intro-text-corner">โบราณสถานจังหวัดศรีสะเกษ</span>
             </div>
-            <nav class="nav-links">
+            <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="nav-links" id="nav-links">
                 <a href="/">หน้าแรก</a>
                 <a href="/places">สถานที่</a>
                 <a href="/about">เกี่ยวกับ</a>
@@ -132,6 +135,15 @@
             mainContent.classList.remove('hidden');
             mainContent.classList.add('fade-in');
             body.classList.remove('no-scroll');
+        }
+
+        // Menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinks = document.getElementById('nav-links');
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
         }
     });
     </script>
